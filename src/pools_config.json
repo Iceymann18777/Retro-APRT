@@ -115,8 +115,8 @@
     "isLP": false,
     "poolAddress": "0xca3a4cbC372EF46d0b6EA02770F031f83964E3d5",
     "price": {
-      "lpaddress": "0x7213a321F1855CF1779f42c0CD85d3D95291D34C",
-      "reserve": 1
+      "lpaddress": "0x74e4716e431f45807dcf19f284c7aa99f18a4fbc",
+      "reserve": 0
     }
   },
   {
@@ -132,8 +132,8 @@
     "isLP": false,
     "poolAddress": "0xF9b104598D4A37A88F7B108D598F5e5D3818d598",
     "price": {
-      "lpaddress": "0x1E249DF2F58cBef7EAc2b0EE35964ED8311D5623",
-      "reserve": 1
+      "lpaddress": "0x28415ff2C35b65B9E5c7de82126b4015ab9d031F",
+      "reserve": 0
     }
   },
   {
