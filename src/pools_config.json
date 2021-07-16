@@ -98,8 +98,8 @@
     "isLP": false,
     "poolAddress": "0x10bd84602628B9B2DAC2273003b60f1f38A8EDf0",
     "price": {
-      "lpaddress": "0xfF5F8C72070215CF6f1b24C6A3B281a901a5f693",
-      "reserve": 1
+      "lpaddress": "0x0297ab11f56e1ad3bf71fb7d96294435b4c63353",
+      "reserve": 0
     }
   },
   {
