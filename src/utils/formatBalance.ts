@@ -1,4 +1,3 @@
-import BigNumber from "bignumber.js";
 export const formatNumberHumanize = (num: string | number | string[]) => {
   if (typeof num !== "number") {
     num = parseFloat(num);
