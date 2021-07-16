@@ -4,6 +4,7 @@ import qbertpxl from "../assets/logos/qbertpxl.png";
 import qbertdice from "../assets/logos/QBERTSWAG.png";
 import Popup from "reactjs-popup";
 import utils from "../utils/aprLib/index";
+import { formatNumberHumanize } from "../utils/formatBalance";
 const tokenAbi = [
   {
     constant: true,
@@ -285,15 +286,6 @@ const tokenAbi = [
 ];
 const qbertAddress = "0x6ED390Befbb50f4b492f08Ea0965735906034F81";
 const burnAddress = "0x000000000000000000000000000000000000dEaD";
-
-function formatNumberHumanize(num) {
-  if (typeof num !== "number") {
-    num = parseFloat(num);
-  }
-  num = num.toFixed(2);
-  num = num.split(".");
-  return num[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + num[1];
-}
 
 export default function Nav() {
   var [menu, setMenu] = useState(false);

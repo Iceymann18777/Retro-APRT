@@ -1,5 +1,6 @@
 import Countdown from "react-countdown";
 import { Fragment, useState, useEffect } from "react";
+import { formatNumberHumanize } from "../../utils/formatBalance";
 import nativeFarmAbi from "../../utils/nativeFarmAbi";
 export default function Tvl() {
   var [value, setValue] = useState(0);
@@ -60,7 +61,7 @@ export default function Tvl() {
   return (
     <Fragment>
       <div style={{ fontSize: 20 }} className="txt tvl ml-auto">
-        TVL ${numFormatter(value)} <br></br>
+        TVL ${formatNumberHumanize(value)} <br></br>
         <Countdown date={Date.now() + timeLeft * 1000} renderer={renderer} />,
       </div>
     </Fragment>

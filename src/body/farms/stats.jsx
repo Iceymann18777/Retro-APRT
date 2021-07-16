@@ -1,6 +1,7 @@
 import { useState, useEffect } from "react";
 import poolAbi from "../../utils/nativeFarmAbi";
 import config from "../../pools_config.json";
+import { formatNumberHumanize } from "../../utils/formatBalance";
 //import Web3 from "web3";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 export default function Stats() {
@@ -38,16 +39,6 @@ export default function Stats() {
     window.ts.pending = num / 10 ** 18;
   }
 
-  function formatNumber(num) {
-    if (num > 999 && num < 1000000) {
-      return (num / 1000).toFixed(1) + "K";
-    } else if (num > 1000000) {
-      return (num / 1000000).toFixed(1) + "K";
-    } else if (num < 999) {
-      return num;
-    }
-  }
-
   async function harvestall() {
     let pool = new web3.eth.Contract(poolAbi, farmAddress);
     for (let i = 0; i < config.length; i++) {
@@ -69,13 +60,15 @@ export default function Stats() {
       <div className="txt deposit-ttl">My total deposit:</div>
       <div className={"txt total-deposit loading"}>
         {data.deposited
-          ? "$" + formatNumber(data.deposited.toFixed(2))
+          ? "$" + formatNumberHumanize(data.deposited.toFixed(2))
           : "0.00"}
       </div>
       <div className="txt qbert-ttl">QBert pending:</div>
       <div className="txt qbert-pending loading">
         <span className="amount">
-          {data.pending ? data.pending.toFixed(3) : "0.000"}
+          {data.pending
+            ? formatNumberHumanize(data.pending.toFixed(3))
+            : "0.000"}
         </span>
       </div>
       <div
