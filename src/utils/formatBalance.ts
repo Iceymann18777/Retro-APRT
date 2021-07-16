@@ -1,4 +1,5 @@
-export const formatNumberHumanize = (num: 0) => {
+import BigNumber from "bignumber.js";
+export const formatNumberHumanize = (num: BigNumber) => {
   if (typeof num !== "number") {
     num = parseFloat(num);
   }
