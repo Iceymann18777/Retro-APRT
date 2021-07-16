@@ -284,11 +284,28 @@ const tokenAbi = [
   }
 ];
 const qbertAddress = "0x6ED390Befbb50f4b492f08Ea0965735906034F81";
+const burnAddress = "0x000000000000000000000000000000000000dEaD";
+
+function formatNumberHumanize(num) {
+  if (typeof num !== "number") {
+    num = parseFloat(num);
+  }
+  num = num.toFixed(2);
+  num = num.split(".");
+  return num[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + num[1];
+}
 
 export default function Nav() {
   var [menu, setMenu] = useState(false);
   var [account, setAccount] = useState("");
-  var [data, setData] = useState({ balance: 0, totalSupply: 0, price: 0 });
+  var [data, setData] = useState({
+    balance: 0,
+    burnBalance: 0,
+    totalSupply: 0,
+    ciculatingSupply: 0,
+    price: 0,
+    marketCap: 0
+  });
 
   const toggleMenu = () => {
     if (!menu) {
@@ -306,15 +323,21 @@ export default function Nav() {
           try {
             let qbert = new web3.eth.Contract(tokenAbi, qbertAddress);
             let balance = await qbert.methods.balanceOf(window.account).call();
+            let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
             let totalSupply = await qbert.methods.totalSupply().call();
+            let ciculatingSupply = totalSupply - burnBalance;
             let price = await utils.getTokenPrice(
               "0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",
               18
             );
+            let marketCap = price[0] * (ciculatingSupply / 10 ** 18);
             setData({
               balance: balance / 10 ** 18,
+              burnBalance: burnBalance / 10 ** 18,
               totalSupply: totalSupply / 10 ** 18,
+              ciculatingSupply: ciculatingSupply / 10 ** 18,
               price: price[0],
+              marketCap: marketCap,
               loaded: true
             });
           } catch (error) {}
@@ -413,12 +436,20 @@ export default function Nav() {
                     <div className="key-value mt-10">
                       <div className="key">Current Supply</div>
                       <div className="value qbert-supply">
-                        {data.totalSupply.toFixed(3)}
+                        {formatNumberHumanize(data.totalSupply.toFixed(2))}
+                      </div>
+                    </div>
+                    <div className="key-value mt-10">
+                      <div className="key">Circulating Supply</div>
+                      <div className="value qbert-supply">
+                        {formatNumberHumanize(data.ciculatingSupply.toFixed(3))}
                       </div>
                     </div>
                     <div className="key-value mt-10">
                       <div className="key">Market Cap</div>
-                      <div className="value market-cap">-</div>
+                      <div className="value market-cap">
+                        ${formatNumberHumanize(data.marketCap.toFixed(2))}
+                      </div>
                     </div>
                     <div className="key-value mt-10">
                       <div className="key">Contract Address</div>
@@ -572,12 +603,20 @@ export default function Nav() {
                     <div className="key-value mt-10">
                       <div className="key">Current Supply</div>
                       <div className="value qbert-supply">
-                        {data.totalSupply.toFixed(2)}
+                        {formatNumberHumanize(data.totalSupply.toFixed(2))}
+                      </div>
+                    </div>
+                    <div className="key-value mt-10">
+                      <div className="key">Circulating Supply</div>
+                      <div className="value qbert-supply">
+                        {formatNumberHumanize(data.ciculatingSupply.toFixed(2))}
                       </div>
                     </div>
                     <div className="key-value mt-10">
                       <div className="key">Market Cap</div>
-                      <div className="value market-cap">-</div>
+                      <div className="value market-cap">
+                        ${formatNumberHumanize(data.marketCap.toFixed(2))}
+                      </div>
                     </div>
                     <div className="key-value mt-10">
                       <div className="key">Contract Address</div>
