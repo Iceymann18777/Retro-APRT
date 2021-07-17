@@ -4328,7 +4328,7 @@ div.create-lp-content .btn.create {
   }
 
   .app .content .pools .pool-card .info .pool {
-    min-width: 140px;
+    min-width: 80px;
   }
 
   .app .content .pools .pool-card .info .pool .ttl {
