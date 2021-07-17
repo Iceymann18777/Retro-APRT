@@ -1,32 +1,40 @@
-export const formatNumberHumanize = (num) => {
+export const formatNumberHumanize = (num, decimals) => {
   if (typeof num !== "number") {
     num = parseFloat(num);
   }
-  num = num.toFixed(2);
-  num = num.split(".");
-  return num[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + num[1];
+  num = num.toFixed(decimals);
+  if (decimals == 0) {
+    return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
+  } else {
+    num = num.split(".");
+    return num[0].replace(/\B(?=(\d{3})+(?!\d))/g, ",") + "." + num[1];
+  }
 };
 
-export const formatNumberSuffix = (num, ignoreBelowThousand = false) => {
+export const formatNumberSuffix = (
+  num,
+  decimals,
+  ignoreBelowThousand = false
+) => {
   if (typeof num !== "number") {
     num = parseFloat(num);
   }
   if (num < 1e6) {
-    return formatNumberHumanize(num, ignoreBelowThousand ? 0 : 0);
+    return formatNumberHumanize(num, ignoreBelowThousand ? 0 : decimals);
   } else if (num >= 1e6 && num < 1e9) {
     num /= 1e6;
-    return formatNumberHumanize(num) + "M";
+    return formatNumberHumanize(num, decimals) + "M";
   } else if (num >= 1e9 && num < 1e12) {
     num /= 1e9;
-    return formatNumberHumanize(num) + "B";
+    return formatNumberHumanize(num, decimals) + "B";
   } else if (num >= 1e12 && num < 1e15) {
     num /= 1e12;
-    return formatNumberHumanize(num) + "T";
+    return formatNumberHumanize(num, decimals) + "T";
   } else if (num >= 1e15) {
     num /= 1e15;
-    return formatNumberHumanize(num) + "Q";
+    return formatNumberHumanize(num, decimals) + "Q";
   }
-  return formatNumberHumanize(num);
+  return formatNumberHumanize(num, decimals);
 };
 
 export const numFormatter = (num) => {

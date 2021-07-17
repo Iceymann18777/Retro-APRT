@@ -903,7 +903,9 @@ export default function Pool(props) {
           </div>
         </div>
         <div className="key-value apy shorter">
-          <div className="val primary">{formatNumberSuffix(poolInfo.apr)}%</div>
+          <div className="val primary">
+            {formatNumberSuffix(poolInfo.apr, 2)}%
+          </div>
           <div className="key">APR</div>
         </div>
         <div className="key-value balance">
@@ -926,7 +928,7 @@ export default function Pool(props) {
         <div className="key-value daily shorter">
           <div className="val">
             {poolInfo.apr
-              ? formatNumberSuffix(poolInfo.apr / 365) + "%"
+              ? formatNumberSuffix(poolInfo.apr / 365, 2) + "%"
               : "***"}
           </div>
           <div className="key">Daily</div>
@@ -936,7 +938,8 @@ export default function Pool(props) {
             {poolInfo.price
               ? "$" +
                 formatNumberSuffix(
-                  (poolInfo.balance / 10 ** props.decimals) * poolInfo.price
+                  (poolInfo.balance / 10 ** props.decimals) * poolInfo.price,
+                  0
                 )
               : "***"}
           </div>
@@ -1078,7 +1081,7 @@ export default function Pool(props) {
               <div className="itm qbert-apy">
                 <span className="ttl">{props.name} APR:&nbsp;</span>
                 <span className="val">
-                  {formatNumberSuffix(poolInfo.apr)} %
+                  {formatNumberSuffix(poolInfo.apr, 2)} %
                 </span>
                 <img className="tooltip" src={info}></img>
               </div>
@@ -1090,7 +1093,7 @@ export default function Pool(props) {
               <div className="itm qbert-daily-apy">
                 <span className="ttl">{props.name} Daily:&nbsp;</span>
                 <span className="val">
-                  {formatNumberSuffix(poolInfo.apr / 365)}%
+                  {formatNumberSuffix(poolInfo.apr / 365, 2)}%
                 </span>
               </div>
             </div>
@@ -1104,7 +1107,8 @@ export default function Pool(props) {
                 <span className="val">
                   $
                   {formatNumberSuffix(
-                    (poolInfo.balance / 10 ** props.decimals) * poolInfo.price
+                    (poolInfo.balance / 10 ** props.decimals) * poolInfo.price,
+                    0
                   )}
                 </span>
               </div>
