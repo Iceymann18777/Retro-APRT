@@ -60,13 +60,15 @@ export default function Stats() {
       <div className="txt deposit-ttl">My total deposit:</div>
       <div className={"txt total-deposit loading"}>
         {data.deposited
-          ? "$" + formatNumberHumanize(data.deposited, 2)
+          ? "$" + formatNumberHumanize(data.deposited.toFixed(2))
           : "0.00"}
       </div>
       <div className="txt qbert-ttl">QBert pending:</div>
       <div className="txt qbert-pending loading">
         <span className="amount">
-          {data.pending ? formatNumberHumanize(data.pending, 3) : "0.000"}
+          {data.pending
+            ? formatNumberHumanize(data.pending.toFixed(3))
+            : "0.000"}
         </span>
       </div>
       <div

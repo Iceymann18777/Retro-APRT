@@ -428,19 +428,19 @@ export default function Nav() {
                     <div className="key-value mt-10">
                       <div className="key">Current Supply</div>
                       <div className="value qbert-supply">
-                        {formatNumberHumanize(data.totalSupply, 2)}
+                        {formatNumberHumanize(data.totalSupply.toFixed(2))}
                       </div>
                     </div>
                     <div className="key-value mt-10">
                       <div className="key">Circulating Supply</div>
                       <div className="value qbert-supply">
-                        {formatNumberHumanize(data.ciculatingSupply, 3)}
+                        {formatNumberHumanize(data.ciculatingSupply.toFixed(3))}
                       </div>
                     </div>
                     <div className="key-value mt-10">
                       <div className="key">Market Cap</div>
                       <div className="value market-cap">
-                        ${formatNumberHumanize(data.marketCap, 2)}
+                        ${formatNumberHumanize(data.marketCap.toFixed(2))}
                       </div>
                     </div>
                     <div className="key-value mt-10">
@@ -595,19 +595,19 @@ export default function Nav() {
                     <div className="key-value mt-10">
                       <div className="key">Current Supply</div>
                       <div className="value qbert-supply">
-                        {formatNumberHumanize(data.totalSupply, 2)}
+                        {formatNumberHumanize(data.totalSupply.toFixed(2))}
                       </div>
                     </div>
                     <div className="key-value mt-10">
                       <div className="key">Circulating Supply</div>
                       <div className="value qbert-supply">
-                        {formatNumberHumanize(data.ciculatingSupply, 2)}
+                        {formatNumberHumanize(data.ciculatingSupply.toFixed(2))}
                       </div>
                     </div>
                     <div className="key-value mt-10">
                       <div className="key">Market Cap</div>
                       <div className="value market-cap">
-                        ${formatNumberHumanize(data.marketCap, 2)}
+                        ${formatNumberHumanize(data.marketCap.toFixed(2))}
                       </div>
                     </div>
                     <div className="key-value mt-10">

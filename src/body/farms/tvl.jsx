@@ -61,7 +61,7 @@ export default function Tvl() {
   return (
     <Fragment>
       <div style={{ fontSize: 20 }} className="txt tvl ml-auto">
-        TVL ${formatNumberHumanize(value, 2)} <br></br>
+        TVL ${formatNumberHumanize(value.toFixed(2))} <br></br>
         <Countdown date={Date.now() + timeLeft * 1000} renderer={renderer} />,
       </div>
     </Fragment>
