@@ -12,7 +12,7 @@ import { formatNumberSuffix } from "../../../utils/formatBalance";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 const BLOCKS_PER_DAY = new BigNumber((60 * 60 * 24) / 3);
 const BLOCKS_PER_YEAR = new BigNumber(BLOCKS_PER_DAY * 365);
-var QBERT_PERBLOCK;
+var QBERT_PERBLOCK = 0.58;
 
 const tokenAbi = [
   {
