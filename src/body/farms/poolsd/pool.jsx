@@ -8,6 +8,7 @@ import getBalance from "../../../utils/tokenUtils";
 import poolAbi from "../../../utils/nativeFarmAbi";
 import strategyAbi from "../../../utils/strategyAbi";
 import { constants, utils } from "ethers";
+import { formatNumberSuffix } from "../../../utils/formatBalance";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 const BLOCKS_PER_DAY = new BigNumber((60 * 60 * 24) / 3);
 const BLOCKS_PER_YEAR = new BigNumber(BLOCKS_PER_DAY * 365);
@@ -856,16 +857,6 @@ export default function Pool(props) {
     }
   });
 
-  function numFormatter(num) {
-    if (num > 999 && num < 1000000) {
-      return (num / 1000).toFixed(1) + "K"; // convert to K for number from > 1000 < 1 million
-    } else if (num > 1000000) {
-      return (num / 1000000).toFixed(1) + "M"; // convert to M for number from > 1 million
-    } else if (num <= 999) {
-      return num.toFixed(2); // if value < 1000, nothing to do
-    }
-  }
-
   let sd = () => {
     $(`div.details.id${props.id}`).slideToggle(500);
     $(`div.pool-card.id${props.id}`).toggleClass("expanded", true);
@@ -912,7 +903,7 @@ export default function Pool(props) {
           </div>
         </div>
         <div className="key-value apy shorter">
-          <div className="val primary">{numFormatter(poolInfo.apr)}%</div>
+          <div className="val primary">{formatNumberSuffix(poolInfo.apr)}%</div>
           <div className="key">APR</div>
         </div>
         <div className="key-value balance">
@@ -934,7 +925,9 @@ export default function Pool(props) {
 
         <div className="key-value daily shorter">
           <div className="val">
-            {poolInfo.apr ? numFormatter(poolInfo.apr / 366) + "%" : "***"}
+            {poolInfo.apr
+              ? formatNumberSuffix(poolInfo.apr / 365) + "%"
+              : "***"}
           </div>
           <div className="key">Daily</div>
         </div>
@@ -942,7 +935,7 @@ export default function Pool(props) {
           <div className="val">
             {poolInfo.price
               ? "$" +
-                numFormatter(
+                formatNumberSuffix(
                   (poolInfo.balance / 10 ** props.decimals) * poolInfo.price
                 )
               : "***"}
@@ -1086,7 +1079,9 @@ export default function Pool(props) {
               </div>
               <div className="itm qbert-apy">
                 <span className="ttl">{props.name} APR:&nbsp;</span>
-                <span className="val">{numFormatter(poolInfo.apr)} %</span>
+                <span className="val">
+                  {formatNumberSuffix(poolInfo.apr)} %
+                </span>
                 <img className="tooltip" src={info}></img>
               </div>
             </div>
@@ -1096,7 +1091,9 @@ export default function Pool(props) {
               </div>
               <div className="itm qbert-daily-apy">
                 <span className="ttl">{props.name} Daily:&nbsp;</span>
-                <span className="val">{numFormatter(poolInfo.apr / 366)}%</span>
+                <span className="val">
+                  {formatNumberSuffix(poolInfo.apr / 365)}%
+                </span>
               </div>
             </div>
             <div className="info">
@@ -1108,7 +1105,7 @@ export default function Pool(props) {
                 <span className="ttl">{props.name} TVL:&nbsp;</span>
                 <span className="val">
                   $
-                  {numFormatter(
+                  {formatNumberSuffix(
                     (poolInfo.balance / 10 ** props.decimals) * poolInfo.price
                   )}
                 </span>
