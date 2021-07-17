@@ -334,7 +334,7 @@ export default function Nav() {
             });
           } catch (error) {}
         }
-      }, 1500);
+      }, 3000);
     }
   });
 

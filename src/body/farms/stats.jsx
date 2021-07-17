@@ -20,7 +20,7 @@ export default function Stats() {
             });
           }
         }
-      }, 1000);
+      }, 3000);
     }
   });
 

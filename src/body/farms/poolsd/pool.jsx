@@ -853,7 +853,7 @@ export default function Pool(props) {
       setLoaded(true);
       setInterval(async () => {
         await loadall();
-      }, 1000);
+      }, 3000);
     }
   });
 
