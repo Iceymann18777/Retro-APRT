@@ -1,4 +1,4 @@
-export const formatNumberHumanize = (num: number) => {
+export function formatNumberHumanize = (num) => {
   if (typeof num !== "number") {
     num = parseFloat(num);
   }
