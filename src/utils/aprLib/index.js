@@ -1,14 +1,17 @@
-import Web3 from "web3";
+import Web3Ext from "web3";
 const Contract = require("web3-eth-contract");
 const axios = require("axios");
-const provider = "https://bsc-dataseed1.ninicoin.io/";
-const bep20Abi = require("../bep20.js");
+//const provider = "https://bsc-dataseed1.ninicoin.io/";
+//const bep20Abi = require("../bep20.js");
 const poolAbi = require("./pool");
-Contract.setProvider(provider);
-const bnb = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
-const bnbPool = "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16";
-const bnbContract = new Contract(bep20Abi.data, bnb);
-
+//Contract.setProvider(provider);
+//const bnb = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
+//const bnbPool = "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16";
+//const bnbContract = new Contract(bep20Abi.data, bnb);
+const provider = new Web3Ext.providers.HttpProvider(
+  "https://bsc-dataseed1.ninicoin.io/"
+);
+const web3ext = new Web3Ext(provider);
 async function getTokenPrice(poolAddress, decimals) {
   var pool = new Contract(poolAbi.data, poolAddress);
   let tokenInfo = await getTokensInfo(pool);
@@ -54,4 +57,4 @@ async function getLpPrice(poolAddress, decimals) {
   return [amount0, amount1];
 }
 
-export default { getTokenPrice, getLpPrice };
+export default { getTokenPrice, getLpPrice, web3ext };

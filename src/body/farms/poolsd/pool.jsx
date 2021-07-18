@@ -1,5 +1,6 @@
 import { useState, useEffect } from "react";
 import Web3 from "web3";
+import Web3Ext from "web3";
 import util from "../../../utils/aprLib/index";
 import BigNumber from "bignumber.js";
 import info from "../../../assets/svg/info-primary.svg";
@@ -13,6 +14,10 @@ const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 const BLOCKS_PER_DAY = new BigNumber((60 * 60 * 24) / 3);
 const BLOCKS_PER_YEAR = new BigNumber(BLOCKS_PER_DAY * 365);
 var QBERT_PERBLOCK = 0.58;
+const provider = new Web3Ext.providers.HttpProvider(
+  "https://bsc-dataseed1.ninicoin.io/"
+);
+const web3ext = new Web3Ext(provider);
 
 const tokenAbi = [
   {
@@ -625,9 +630,9 @@ export default function Pool(props) {
 
   const loadPool = async () => {
     try {
-      let token = new web3.eth.Contract(tokenAbi, props.token_address);
-      let pool = new web3.eth.Contract(poolAbi, farmAddress);
-      let strategy = new web3.eth.Contract(strategyAbi, props.poolAddress);
+      let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
+      let pool = new web3ext.eth.Contract(poolAbi, farmAddress);
+      let strategy = new web3ext.eth.Contract(strategyAbi, props.poolAddress);
       let balanced = await getBalance(props.token_address, window.account);
       setBalance(balanced);
       var QBERT_PERBLOCK = await pool.methods.NATIVEPerBlock().call();
@@ -652,7 +657,7 @@ export default function Pool(props) {
       );
       let locked;
       if (props.token_address == "0xa6e53f07bD410df069e20Ced725bdC9135146Fe9") {
-        let rcube = new web3.eth.Contract(rcubeAbi, props.token_address);
+        let rcube = new web3ext.eth.Contract(rcubeAbi, props.token_address);
         let burnAmount = await rcube.methods._getBurnLevy.call().call();
         console.log(burnAmount);
         if (burnAmount > 1) {
