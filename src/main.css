@@ -367,7 +367,7 @@ div.btn-close {
   display: block;
   width: 12px;
   height: 12px;
-  background-image: url(../img/close.svg);
+  background-image: url(../static/frontend/img/popup-close.svg);
 }
 
 a.btn-close::before,
