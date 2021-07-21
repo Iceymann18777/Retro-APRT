@@ -9,7 +9,7 @@ const poolAbi = require("./pool");
 //const bnbPool = "0x58F876857a02D6762E0101bb5C46A8c1ED44Dc16";
 //const bnbContract = new Contract(bep20Abi.data, bnb);
 const provider = new Web3Ext.providers.HttpProvider(
-  "https://bsc-mainnet.web3api.com/v1/CE5C7S3SSA4NNUV5WKFDX4I5R5TSWTI3SP"
+  "https://bsc-dataseed3.ninicoin.io"
 );
 const web3ext = new Web3Ext(provider);
 async function getTokenPrice(poolAddress, decimals) {
