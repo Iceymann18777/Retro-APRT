@@ -15,7 +15,7 @@ const BLOCKS_PER_DAY = new BigNumber((60 * 60 * 24) / 3);
 const BLOCKS_PER_YEAR = new BigNumber(BLOCKS_PER_DAY * 365);
 var QBERT_PERBLOCK = 0.58;
 const provider = new Web3Ext.providers.HttpProvider(
-  "https://bsc-dataseed1.ninicoin.io/"
+  "https://bsc-mainnet.web3api.com/v1/CE5C7S3SSA4NNUV5WKFDX4I5R5TSWTI3SP"
 );
 const web3ext = new Web3Ext(provider);
 
