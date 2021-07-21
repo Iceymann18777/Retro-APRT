@@ -429,7 +429,7 @@ div.btn.expand::after {
   position: absolute;
   width: 17px;
   height: 11px;
-  background: url(../img/arrow-down.svg) no-repeat;
+  background: url(../static/frontend/img/arrow-down.svg) no-repeat;
   left: calc(50% - 8px);
   top: calc(50% - 5px);
   transition: transform 0.2s ease;
@@ -482,7 +482,7 @@ div.btn span.warn::before {
   position: absolute;
   width: 16px;
   height: 15px;
-  background: url(../img/info-primary.svg) no-repeat;
+  background: url(../static/frontend/img/info-primary.svg) no-repeat;
   left: -22px;
   top: calc(50% - 7px);
   background-size: 15px 15px;
@@ -529,7 +529,7 @@ div.btn span.warn::before {
   height: 11px;
   right: 23px;
   top: calc(50% - 5px);
-  background: url(../img/arrow-down.svg) no-repeat;
+  background: url(../static/frontend/img/arrow-down.svg) no-repeat;
   background-size: 15px 10px;
   transition: transform 0.2s ease;
 }
@@ -772,7 +772,7 @@ input[type="number"]::placeholder {
   display: block;
   width: 16px;
   height: 16px;
-  background: url(../img/search.svg);
+  background: url(../static/frontend/img/search.svg);
   top: calc(50% - 4px);
   right: 23px;
 }
@@ -1223,7 +1223,7 @@ header .wallet .btn-wallet::before {
   content: "";
   width: 20px;
   height: 20px;
-  background-image: url(../img/wallet.svg);
+  background-image: url(../static/frontend/img/wallet.svg);
   left: 30px;
   top: 9px;
 }
@@ -1691,7 +1691,7 @@ main .content .app-version {
   content: "";
   position: absolute;
   display: block;
-  background-image: url(../img/hide.svg);
+  background-image: url(../static/frontend/img/hide.svg);
   background-size: 18px 15px;
   width: 18px;
   height: 15px;
@@ -1704,7 +1704,7 @@ main .content .app-version {
   content: "";
   position: absolute;
   display: block;
-  background-image: url(../img/show.svg);
+  background-image: url(../static/frontend/img/show.svg);
   background-size: 18px 15px;
   width: 18px;
   height: 15px;
@@ -2339,7 +2339,7 @@ main .content .app-version {
   display: block;
   width: 35px;
   height: 35px;
-  background: url(../img/symbols/qbertpxl.png) no-repeat;
+  background: url(./UIMain/assets/logos/qbertpxl.png) no-repeat;
   left: -45px;
 }
 
@@ -2705,7 +2705,7 @@ main.download-wallet .download-card:not(:first-of-type) {
   height: 40px;
   left: -40px;
   bottom: calc(50% - 20px);
-  background: url(../img/radioactive.svg) no-repeat;
+  /*background: url(../img/radioactive.svg) no-repeat;*/
   background-size: 40px 40px;
   animation: rotate 5s linear infinite;
 }
