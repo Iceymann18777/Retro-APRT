@@ -3036,7 +3036,7 @@ main.statistics .wallet-container .info-strip .qbert-amount::before {
   display: block;
   width: 35px;
   height: 35px;
-  background: url(../img/symbols/qbertpxl.png) no-repeat;
+  background: url(./UIMain/assets/logos/qbertpxl.png) no-repeat;
   left: -45px;
   top: -3px;
 }
