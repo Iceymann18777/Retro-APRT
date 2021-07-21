@@ -3,6 +3,8 @@ import logo from "../assets/logos/logo.png";
 import qbertpxl from "../assets/logos/qbertpxl.png";
 import qbertdice from "../assets/logos/QBERTSWAG.png";
 import Popup from "reactjs-popup";
+import popupclose from "../assets/svg/popup-close.svg";
+import popupcopy from "../assets/svg/copy.svg";
 import utils from "../../utils/aprLib/index";
 import { formatNumberHumanize } from "../../utils/formatBalance";
 import tokenAbi from "../../Resources/lib/abi/tokenAbi.json";
@@ -134,7 +136,7 @@ export default function Nav() {
                     <div className="ttl">Your Qbert</div>
                     <img
                       className="btn close"
-                      src="static/frontend/img/popup-close.svg"
+                      src={popupclose}
                       onClick={close}
                     />
                   </div>
@@ -169,10 +171,7 @@ export default function Nav() {
                       <div className="key">Contract Address</div>
                       <div className="value qbert-contract">
                         <span />
-                        <img
-                          className="copy"
-                          src="static/frontend/img/copy.svg"
-                        />
+                        <img className="copy" src={popupcopy} />
                       </div>
                     </div>
                     <a
@@ -300,7 +299,7 @@ export default function Nav() {
                     <div className="ttl">Your Qbert</div>
                     <img
                       className="btn close"
-                      src="static/frontend/img/popup-close.svg"
+                      src={popupclose}
                       onClick={close}
                     />
                   </div>
@@ -336,10 +335,7 @@ export default function Nav() {
                       <div className="key">Contract Address</div>
                       <div className="value qbert-contract">
                         <span />
-                        <img
-                          className="copy"
-                          src="static/frontend/img/copy.svg"
-                        />
+                        <img className="copy" src={popupcopy} />
                       </div>
                     </div>
                     <a
