@@ -1,7 +1,7 @@
 import { useState, useEffect } from "react";
-import poolAbi from "../../utils/nativeFarmAbi";
-import config from "../../pools_config.json";
-import { formatNumberHumanize } from "../../utils/formatBalance";
+import poolAbi from "../../../Resources/lib/abi/nativeFarmAbi.json";
+import config from "../../../pools_config.json";
+import { formatNumberHumanize } from "../../../utils/formatBalance";
 //import Web3 from "web3";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 export default function Stats() {
@@ -20,7 +20,7 @@ export default function Stats() {
             });
           }
         }
-      }, 3000);
+      }, 5000);
     }
   });
 

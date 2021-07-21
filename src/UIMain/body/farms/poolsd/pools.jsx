@@ -1,6 +1,6 @@
 //mport Web3 from "web3";
 //import { useEffect } from "react";
-import config from "../../../pools_config.json";
+import config from "../../../../pools_config.json";
 import Pool from "./pool";
 //import getTokenPrice from "../../../utils/aprLib/index";
 //import send from "../../../utils/getTvl";

@@ -7,9 +7,7 @@ const BSCmain = [
       symbol: "bnb",
       decimals: 18
     },
-    rpcUrls: [
-      "https://bsc-mainnet.web3api.com/v1/CE5C7S3SSA4NNUV5WKFDX4I5R5TSWTI3SP"
-    ],
+    rpcUrls: ["https://binance.ankr.com/"],
     blockExplorerUrls: ["https://bscscan.com/"]
   }
 ];

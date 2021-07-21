@@ -1,7 +1,7 @@
 import Countdown from "react-countdown";
 import { Fragment, useState, useEffect } from "react";
-import { formatNumberHumanize } from "../../utils/formatBalance";
-import nativeFarmAbi from "../../utils/nativeFarmAbi";
+import { formatNumberHumanize } from "../../../utils/formatBalance";
+import nativeFarmAbi from "../../../Resources/lib/abi/nativeFarmAbi.json";
 export default function Tvl() {
   var [value, setValue] = useState(0);
   var [timeLeft, setTimeLeft] = useState(5);
@@ -30,7 +30,7 @@ export default function Tvl() {
         if (web3.eth && window.ts) {
           setValue(window.ts.value);
         }
-      }, 3000);
+      }, 5000);
     }
   });
 
