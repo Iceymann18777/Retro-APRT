@@ -38,7 +38,7 @@ async function startup() {
       display: {
         name: "Binance",
         description: "Binance Chain Wallet",
-        logo: require(`./UIMain/assets/wallets/binance-wallet.png`)
+        logo: require(`images/wallets/binance-wallet.png`)
       },
       package: "binance",
       connector: async (ProviderPackage, options) => {
@@ -51,7 +51,7 @@ async function startup() {
       display: {
         name: "Math",
         description: "Math Wallet",
-        logo: require(`./UIMain/assets/wallets/math-wallet.svg`)
+        logo: require(`images/wallets/math-wallet.svg`)
       },
       package: "math",
       connector: connectors.injected
@@ -60,7 +60,7 @@ async function startup() {
       display: {
         name: "Trust",
         description: "Trust Wallet",
-        logo: require(`./UIMain/assets/wallets/trust-wallet.svg`)
+        logo: require(`images/wallets/trust-wallet.svg`)
       },
       package: "twt",
       connector: connectors.injected
@@ -69,7 +69,7 @@ async function startup() {
       display: {
         name: "SafePal",
         description: "SafePal App",
-        logo: require(`./UIMain/assets/wallets/safepal-wallet.svg`)
+        logo: require(`images/wallets/safepal-wallet.svg`)
       },
       package: "safepal",
       connector: connectors.injected
