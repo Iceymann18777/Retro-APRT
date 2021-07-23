@@ -1,14 +1,15 @@
 import Web3 from "web3";
 
 import network from "./provider";
-const getWeb3 = () => {
+const getWeb3 = (provider) => {
   return new Promise(async (resolve, reject) => {
+    window.ethereum = provider;
     // Modern dapp browsers...
     if (window.ethereum) {
       window.web3 = new Web3(window.ethereum);
       try {
         if (window.ethereum.isMetaMask) {
-          const provider = window.ethereum;
+          //const provider = window.ethereum;
           if (provider) {
             await provider.request({
               method: "wallet_addEthereumChain",
@@ -23,6 +24,7 @@ const getWeb3 = () => {
         window.account = accounts[0];
         window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
         const web3 = window.ethereum;
+        //const web3 = provider;
         window.web3 = new Web3(window.ethereum);
         console.log("Web3 enabled in window.ethereum");
         console.log("Account Logged", window.account);

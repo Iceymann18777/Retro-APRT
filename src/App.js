@@ -5,10 +5,10 @@ import Farms from "./UIMain/body/farms/index";
 import Footer from "./UIMain/Footer";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
-import logo from "./UIMain/assets/logos/QBERTSWAG.png";
 import { connectors } from "web3modal";
-import Web3 from "web3";
-//import getWeb3 from "./utils/web3Utils";
+import logo from "./UIMain/assets/logos/QBERTSWAG.png";
+//import Web3 from "web3";
+import getWeb3 from "./utils/web3Utils";
 //import Util from "./utils/aprLib/index.js";
 //import nativeFarmAbi from "./utils/nativeFarmAbi.js";
 import mathwlt from "./UIMain/assets/wallets/math-wallet.svg";
@@ -79,7 +79,7 @@ async function startup() {
 
   const web3Modal = new Web3Modal({
     network: "binance", // optional
-    cacheProvider: true, // optional
+    cacheProvider: false, // optional
     theme: {
       background: "#380033a8",
       main: "#fff",
@@ -91,25 +91,19 @@ async function startup() {
   });
 
   const provider = await web3Modal.connect();
-  const web3 = new Web3(provider);
-  web3.eth.extend({
-    methods: [
-      {
-        name: "chainId",
-        call: "eth_chainId",
-        outputFormatter: web3.utils.hexToNumber
-      }
-    ]
-  });
+  getWeb3(provider);
 }
 
 function App() {
   return (
     <div className="App">
-      <header className="App-header">
-        <img src={logo} className="App-logo" alt="logo" />
+      <main className="app preload">
+        <Nav />
+        <Background />
+        <Farms />
+        <Footer />
         <button onClick={() => startup()}>Check Out</button>
-      </header>
+      </main>
     </div>
   );
 }
