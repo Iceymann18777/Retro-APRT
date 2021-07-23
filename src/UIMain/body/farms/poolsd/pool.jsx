@@ -11,14 +11,10 @@ import tokenAbi from "../../../../Resources/lib/abi/tokenAbi";
 import rcubeAbi from "../../../../Resources/lib/abi/rcubeAbi";
 import poolAbi from "../../../../Resources/lib/abi/nativeFarmAbi";
 import strategyAbi from "../../../../Resources/lib/abi/strategyAbi";
-import Web3 from "web3";
-import web3Modal from "web3modal";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 const BLOCKS_PER_DAY = new BigNumber((60 * 60 * 24) / 3);
 const BLOCKS_PER_YEAR = new BigNumber(BLOCKS_PER_DAY * 365);
 var QBERT_PERBLOCK = 0.58;
-const provider = web3Modal.connect();
-const web3 = new Web3(provider);
 const providerm = new Web3Ext.providers.HttpProvider(
   "https://bsc-dataseed3.defibit.io"
 );
