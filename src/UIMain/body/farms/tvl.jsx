@@ -2,6 +2,10 @@ import Countdown from "react-countdown";
 import { Fragment, useState, useEffect } from "react";
 import { formatNumberHumanize } from "../../../utils/formatBalance";
 import nativeFarmAbi from "../../../Resources/lib/abi/nativeFarmAbi.json";
+import Web3 from "web3";
+import web3Modal from "web3modal";
+const provider = web3Modal.connect();
+const web3 = new Web3(provider);
 export default function Tvl() {
   var [value, setValue] = useState(0);
   var [timeLeft, setTimeLeft] = useState(5);

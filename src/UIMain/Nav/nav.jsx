@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import Web3 from "web3";
+import web3Modal from "web3modal";
 import logo from "../assets/logos/logo.png";
 import qbertpxl from "../assets/logos/qbertpxl.png";
 import qbertdice from "../assets/logos/QBERTSWAG.png";
@@ -10,7 +12,8 @@ import { formatNumberHumanize } from "../../utils/formatBalance";
 import tokenAbi from "../../Resources/lib/abi/tokenAbi.json";
 const qbertAddress = "0x6ED390Befbb50f4b492f08Ea0965735906034F81";
 const burnAddress = "0x000000000000000000000000000000000000dEaD";
-
+const provider = web3Modal.connect();
+const web3 = new Web3(provider);
 export default function Nav() {
   var [menu, setMenu] = useState(false);
   var [account, setAccount] = useState("");

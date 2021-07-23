@@ -3,6 +3,10 @@ import poolAbi from "../../../Resources/lib/abi/nativeFarmAbi.json";
 import config from "../../../pools_config.json";
 import { formatNumberHumanize } from "../../../utils/formatBalance";
 //import Web3 from "web3";
+import Web3 from "web3";
+import web3Modal from "web3modal";
+const provider = web3Modal.connect();
+const web3 = new Web3(provider);
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 export default function Stats() {
   let [data, setData] = useState({ pending: 0, deposit: 0, loaded: false });

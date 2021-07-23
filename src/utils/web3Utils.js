@@ -17,7 +17,7 @@ const getWeb3 = (provider) => {
             });
           }
         }
-        let accounts = await ethereum.request({
+        let accounts = await provider.request({
           method: "eth_requestAccounts",
           params: network.BSCmain
         });
@@ -29,12 +29,12 @@ const getWeb3 = (provider) => {
         console.log("Web3 enabled in window.ethereum");
         console.log("Account Logged", window.account);
         window.ethereum.on("accountsChanged", async (accounts) => {
-          accounts = await ethereum.request({ method: "eth_requestAccounts" });
+          accounts = await provider.request({ method: "eth_requestAccounts" });
           window.account = accounts[0];
           console.log("Account Logged", window.account);
         });
 
-        await ethereum.request({
+        await provider.request({
           method: "eth_requestAccounts",
           params: network.BSCmain
         });
