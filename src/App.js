@@ -15,6 +15,7 @@ import getWeb3 from "./utils/web3Utils";
 import mathwlt from "./UIMain/assets/wallets/math-wallet.svg";
 import twtwlt from "./UIMain/assets/wallets/trust-wallet.svg";
 import sfplwlt from "./UIMain/assets/wallets/safepal-wallet.svg";
+import bnbwlt from "./UIMain/assets/wallets/binance-wallet.png";
 
 let paywall;
 
@@ -41,7 +42,7 @@ async function startup() {
       display: {
         name: "Binance",
         description: "Binance Chain Wallet",
-        logo: require("./UIMain/assets/wallets/binance-wallet.png")
+        logo: bnbwlt
       },
       package: "binance",
       connector: async (ProviderPackage, options) => {
