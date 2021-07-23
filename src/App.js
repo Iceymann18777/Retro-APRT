@@ -12,6 +12,9 @@ import { connectors } from "web3modal";
 import getWeb3 from "./utils/web3Utils";
 //import Util from "./utils/aprLib/index.js";
 //import nativeFarmAbi from "./utils/nativeFarmAbi.js";
+import mathwlt from "./UIMain/assets/wallets/math-wallet.svg";
+import twtwlt from "./UIMain/assets/wallets/trust-wallet.svg";
+import sfplwlt from "./UIMain/assets/wallets/safepal-wallet.svg";
 
 let paywall;
 
@@ -51,7 +54,7 @@ async function startup() {
       display: {
         name: "Math",
         description: "Math Wallet",
-        logo: require("./UIMain/assets/wallets/math-wallet.svg")
+        logo: mathwlt
       },
       package: "math",
       connector: connectors.injected
@@ -60,7 +63,7 @@ async function startup() {
       display: {
         name: "Trust",
         description: "Trust Wallet",
-        logo: require(`./UIMain/assets/wallets/trust-wallet.svg`)
+        logo: twtwlt
       },
       package: "twt",
       connector: connectors.injected
@@ -69,7 +72,7 @@ async function startup() {
       display: {
         name: "SafePal",
         description: "SafePal App",
-        logo: require(`./UIMain/assets/wallets/safepal-wallet.svg`)
+        logo: sfplwlt
       },
       package: "safepal",
       connector: connectors.injected
@@ -77,8 +80,15 @@ async function startup() {
   };
 
   const web3Modal = new Web3Modal({
-    network: "mainnet", // optional
+    network: "binance", // optional
     cacheProvider: true, // optional
+    theme: {
+      background: "#380033a8",
+      main: "#fff",
+      secondary: "#00c0d4",
+      border: "#380033a8",
+      hover: "#ff0a9c78"
+    },
     providerOptions // required
   });
 
