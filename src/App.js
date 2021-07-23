@@ -6,7 +6,7 @@ import Footer from "./UIMain/Footer";
 import Web3Modal from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { connectors } from "web3modal";
-import logo from "./UIMain/assets/logos/QBERTSWAG.png";
+//import logo from "./UIMain/assets/logos/QBERTSWAG.png";
 //import Web3 from "web3";
 import getWeb3 from "./utils/web3Utils";
 //import Util from "./utils/aprLib/index.js";

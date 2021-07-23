@@ -23,7 +23,7 @@ const getWeb3 = (provider) => {
         });
         window.account = accounts[0];
         window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
-        const web3 = window.ethereum;
+        //const web3 = window.ethereum;
         //const web3 = provider;
         window.web3 = new Web3(window.ethereum);
         console.log("Web3 enabled in window.ethereum");

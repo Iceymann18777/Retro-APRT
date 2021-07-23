@@ -3,12 +3,7 @@
   "version": "1.0.0",
   "description": "React and TypeScript example starter project",
   "license": "MIT",
-  "type": "module",
-  "keywords": [
-    "typescript",
-    "react",
-    "starter"
-  ],
+  "keywords": ["typescript", "react", "starter"],
   "main": "src/index.tsx",
   "dependencies": {
     "@babel/runtime": "7.14.0",
@@ -35,9 +30,6 @@
     "web3": "1.4.0",
     "web3modal": "1.9.3"
   },
-  "eslintConfig": {
-    "extends": "react-app"
-  },
   "devDependencies": {
     "@types/jquery": "^3.5.5",
     "@types/react": "17.0.2",
@@ -50,10 +42,5 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "browserslist": [
-    ">0.2%",
-    "not dead",
-    "not ie <= 11",
-    "not op_mini all"
-  ]
+  "browserslist": [">0.2%", "not dead", "not ie <= 11", "not op_mini all"]
 }
