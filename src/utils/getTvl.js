@@ -1,8 +1,9 @@
-import Web3 from "web3";
+import { getWeb3NoAccount } from "../../../utils/web3";
 import farmAbi from "./nativeFarmAbi";
 import config from "../pools_config.json";
-const Contract = require("web3-eth-contract");
-const provider = "https://bsc-dataseed1.binance.org";
+//const Contract = require("web3-eth-contract");
+//const provider = "https://bsc-dataseed1.binance.org";
+const web3 = getWeb3NoAccount();
 
 const poolAbi = require("./aprLib/pool");
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
@@ -12,7 +13,7 @@ function send(results, status) {
   return new Promise(async (resolve, reject) => {
     for (var i = 0; i < config.length; i++) {
       let poolConfig = config[i];
-      const pool = new window.web3.eth.Contract(farmAbi, farmAddress);
+      const pool = new web3.eth.Contract(farmAbi, farmAddress);
       let deposited = await pool.methods
         .stakedWantTokens(poolConfig.id, window.account)
         .call();
@@ -49,7 +50,7 @@ async function tokenPrice(poolConfig) {
 
 // Prices steels
 async function getTokenPrice(poolAddress, decimals) {
-  var pool = new Contract(poolAbi.data, poolAddress);
+  var pool = new web3.eth.Contract(poolAbi.data, poolAddress);
 
   let tokenInfo = await getTokensInfo(pool);
   let bnbPrice = await axios.get(
@@ -77,7 +78,7 @@ async function getTokensInfo(pool) {
 }
 
 async function getLpPrice(poolAddress, decimals) {
-  let pool = Contract(poolAbi.data, poolAddress);
+  let pool = new web3.eth.Contract(poolAbi.data, poolAddress);
 
   let lpSupply = await pool.methods.totalSupply().call();
   let { _reserve0, _reserve1, _blockTimestampLast } = await getTokensInfo();
