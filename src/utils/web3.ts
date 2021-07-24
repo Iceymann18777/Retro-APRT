@@ -1,6 +1,6 @@
 import Web3 from "web3";
 import { HttpProviderOptions } from "web3-core-helpers";
-import getRpcUrl from "../utils/getRpcUrl";
+import getRpcUrl from "./getRpcUrl";
 
 const RPC_URL = getRpcUrl();
 const httpProvider = new Web3.providers.HttpProvider(RPC_URL, {
@@ -8,9 +8,9 @@ const httpProvider = new Web3.providers.HttpProvider(RPC_URL, {
 } as HttpProviderOptions);
 const web3NoAccount = new Web3(httpProvider);
 
-function getWeb3NoAccount() {
+const getWeb3NoAccount = () => {
   return web3NoAccount;
-}
+};
 
 export { getWeb3NoAccount };
 export default web3NoAccount;
