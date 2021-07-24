@@ -13,7 +13,7 @@ function send(results, status) {
   return new Promise(async (resolve, reject) => {
     for (var i = 0; i < config.length; i++) {
       let poolConfig = config[i];
-      const pool = web3.eth.contract(farmAbi, farmAddress);
+      const pool = new web3.eth.Contract(farmAbi, farmAddress);
       let deposited = await pool.methods
         .stakedWantTokens(poolConfig.id, window.account)
         .call();
@@ -50,7 +50,7 @@ async function tokenPrice(poolConfig) {
 
 // Prices steels
 async function getTokenPrice(poolAddress, decimals) {
-  var pool = web3.eth.contract(poolAbi.data, poolAddress);
+  var pool = new web3.eth.Contract(poolAbi.data, poolAddress);
 
   let tokenInfo = await getTokensInfo(pool);
   let bnbPrice = await axios.get(
