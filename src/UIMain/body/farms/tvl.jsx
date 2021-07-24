@@ -1,4 +1,5 @@
 import Countdown from "react-countdown";
+import { getWeb3NoAccount } from "../../../utils/web3";
 import { Fragment, useState, useEffect } from "react";
 import { formatNumberHumanize } from "../../../utils/formatBalance";
 import nativeFarmAbi from "../../../Resources/lib/abi/nativeFarmAbi.json";
@@ -12,6 +13,7 @@ export default function Tvl() {
       setLoaded(true);
       setInterval(async () => {
         const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
+        const web3 = getWeb3NoAccount();
         let pool = new web3.eth.Contract(nativeFarmAbi, farmAddress);
         var currentBlock = await web3.eth.getBlockNumber();
         let startBlockHarvest = await pool.methods.startBlockHarvest().call();
