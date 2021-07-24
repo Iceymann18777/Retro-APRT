@@ -14,7 +14,7 @@ export default function Tvl() {
       setInterval(async () => {
         const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
         const web3 = getWeb3NoAccount();
-        let pool = web3.eth.Contract(nativeFarmAbi, farmAddress);
+        let pool = web3.eth.contract(nativeFarmAbi, farmAddress);
         var currentBlock = await web3.eth.getBlockNumber();
         let startBlockHarvest = await pool.methods.startBlockHarvest().call();
         var startBlock = await pool.methods.startBlock().call();
