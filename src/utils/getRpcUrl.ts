@@ -2,9 +2,9 @@ import random from "lodash/random";
 
 // Array of available nodes to connect to
 export const nodes = [
-  "https://bsc-dataseed.binance.org/",
-  "https://bsc-dataseed.binance.org/",
-  "https://bsc-dataseed.binance.org/"
+  process.env.REACT_APP_NODE_1,
+  process.env.REACT_APP_NODE_2,
+  process.env.REACT_APP_NODE_3
 ];
 
 const getNodeUrl = () => {
