@@ -10,15 +10,15 @@ export default function Stats() {
     const interval = setInterval(async () => {
       if (!data.loaded) {
         setData({ loaded: true });
-        if (web3.eth) {
-          await loadPending();
-          if (window.ts) {
-            setData({
-              pending: window.ts.pending,
-              deposited: window.ts.deposited,
-              loaded: true
-            });
-          }
+      }
+      if (web3.eth) {
+        await loadPending();
+        if (window.ts) {
+          setData({
+            pending: window.ts.pending,
+            deposited: window.ts.deposited,
+            loaded: true
+          });
         }
       }
     }, 3000);
