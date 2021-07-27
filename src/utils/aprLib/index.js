@@ -15,16 +15,16 @@ const web3ext = new Web3Ext(provider);
 async function getTokenPrice(poolAddress, decimals) {
   var pool = new Contract(poolAbi.data, poolAddress);
   let tokenInfo = await getTokensInfo(pool);
+  //let bnbPrice = await axios.get("https://api.coingecko.com/api/v3/coins/binancecoin");
   let bnbPrice = await axios.get(
-    "https://api.coingecko.com/api/v3/coins/binancecoin"
+    "https://api.pancakeswap.info/api/v2/tokens/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
   );
-
   let tokenprice0 =
     (tokenInfo._reserve1 / 10 ** 18 / (tokenInfo._reserve0 / 10 ** decimals)) *
-    bnbPrice.data.market_data.current_price.usd;
+    bnbPrice.data.data.price;
   let tokenprice1 =
     (tokenInfo._reserve0 / 10 ** decimals / (tokenInfo._reserve1 / 10 ** 18)) *
-    bnbPrice.data.market_data.current_price.usd;
+    bnbPrice.data.data.price;
 
   return [tokenprice0, tokenprice1];
 }
