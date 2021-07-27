@@ -267,16 +267,16 @@ export default function Pool(props) {
     }
   }
 
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      if (!loaded) {
-        setLoaded(true);
-      }
-      await loadall();
-    }, 3000);
-    return () => {
-      clearInterval(interval);
-    };
+  useEffect(async () => {
+    if (!loaded) {
+      setLoaded(true);
+      const interval = setInterval(async () => {
+        await loadall();
+      }, 3000);
+      return () => {
+        clearInterval(interval);
+      };
+    }
   });
 
   let sd = () => {
