@@ -1,5 +1,5 @@
 import Countdown from "react-countdown";
-import { getWeb3NoAccount } from "../../../utils/web3";
+import { getWeb3NoAccount } from "../../../utils/web3Global";
 import { Fragment, useState, useEffect } from "react";
 import { formatNumberHumanize } from "../../../utils/formatBalance";
 import nativeFarmAbi from "../../../Resources/lib/abi/nativeFarmAbi.json";
