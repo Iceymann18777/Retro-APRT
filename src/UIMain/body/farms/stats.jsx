@@ -6,10 +6,10 @@ import { formatNumberHumanize } from "../../../utils/formatBalance";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 export default function Stats() {
   let [data, setData] = useState({ pending: 0, deposit: 0, loaded: false });
-  useEffect(async () => {
-    if (!data.loaded) {
-      setData({ loaded: true });
-      setInterval(async () => {
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (!data.loaded) {
+        setData({ loaded: true });
         if (web3.eth) {
           await loadPending();
           if (window.ts) {
@@ -20,8 +20,11 @@ export default function Stats() {
             });
           }
         }
-      }, 5000);
-    }
+      }
+    }, 3000);
+    return () => {
+      clearInterval(interval);
+    };
   });
 
   async function loadPending(params) {

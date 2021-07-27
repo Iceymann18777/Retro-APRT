@@ -1,4 +1,6 @@
 import React, { useEffect, useState } from "react";
+import { tryFetchPrice } from "../../utils/getPrices";
+import { getWeb3NoAccount } from "../../utils/web3Global";
 import logo from "../assets/logos/logo.png";
 import qbertpxl from "../assets/logos/qbertpxl.png";
 import qbertdice from "../assets/logos/QBERTSWAG.png";
@@ -21,7 +23,10 @@ import twtwlt from "../../UIMain/assets/wallets/trust-wallet.svg";
 import sfplwlt from "../../UIMain/assets/wallets/safepal-wallet.svg";
 import bnbwlt from "../../UIMain/assets/wallets/binance-wallet.png";
 
+const web3ext = getWeb3NoAccount();
+
 const qbertAddress = "0x6ED390Befbb50f4b492f08Ea0965735906034F81";
+const zeroAdress = "0x0000000000000000000000000000000000000000";
 const burnAddress = "0x000000000000000000000000000000000000dEaD";
 
 async function startup() {
@@ -122,35 +127,57 @@ export default function Nav() {
     }
   };
 
-  useEffect(async () => {
-    if (window.account) {
-      setAccount(window.account);
-      setInterval(async () => {
-        if (!data.loaded) {
-          try {
-            let qbert = new web3.eth.Contract(tokenAbi, qbertAddress);
-            let balance = await qbert.methods.balanceOf(window.account).call();
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      // hacer algo
+      //setInterval(async () => {
+      if (!data.loaded) {
+        try {
+          if (window.account) {
+            setAccount(window.account);
+            let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
+            let balance = await qbert.methods.balanceOf(account).call();
             let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
             let totalSupply = await qbert.methods.totalSupply().call();
             let ciculatingSupply = totalSupply - burnBalance;
-            let price = await utils.getTokenPrice(
-              "0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",
-              18
-            );
-            let marketCap = price[0] * (ciculatingSupply / 10 ** 18);
+            let price = await tryFetchPrice(qbertAddress);
+            //let price = await utils.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
+            let marketCap = price * (ciculatingSupply / 10 ** 18);
             setData({
               balance: balance / 10 ** 18,
               burnBalance: burnBalance / 10 ** 18,
               totalSupply: totalSupply / 10 ** 18,
               ciculatingSupply: ciculatingSupply / 10 ** 18,
-              price: price[0],
+              price: price,
               marketCap: marketCap,
               loaded: true
             });
-          } catch (error) {}
-        }
-      }, 5000);
-    }
+          } else {
+            let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
+            let balance = await qbert.methods.balanceOf(zeroAdress).call();
+            let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
+            let totalSupply = await qbert.methods.totalSupply().call();
+            let ciculatingSupply = totalSupply - burnBalance;
+            let price = await tryFetchPrice(qbertAddress);
+            //let price = await utils.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
+            let marketCap = price * (ciculatingSupply / 10 ** 18);
+            setData({
+              balance: balance / 10 ** 18,
+              burnBalance: burnBalance / 10 ** 18,
+              totalSupply: totalSupply / 10 ** 18,
+              ciculatingSupply: ciculatingSupply / 10 ** 18,
+              price: price,
+              marketCap: marketCap,
+              loaded: false
+            });
+          }
+        } catch (error) {}
+      }
+    }, 3000);
+    return () => {
+      clearInterval(interval);
+    };
+    //}, 5000);
   });
 
   return (
@@ -204,7 +231,9 @@ export default function Nav() {
         <div className="wallet">
           <div className="qbert-price">
             <img src={qbertpxl} />
-            <div className="txt ml-10 price">${data.price.toFixed(2)}</div>
+            <div className="txt ml-10 price">
+              ${formatNumberHumanize(data.price, 2)}
+            </div>
           </div>
           <Popup
             trigger={
@@ -233,11 +262,13 @@ export default function Nav() {
                   </div>
                   <div className="content">
                     <img src="images/qbert.png" />
-                    <div className="balance">{data.balance.toFixed(2)}</div>
+                    <div className="balance">
+                      {formatNumberHumanize(data.balance, 2)}
+                    </div>
                     <div className="key-value">
                       <div className="key">Price</div>
                       <div className="value qbert-price">
-                        ${data.price.toFixed(2)}
+                        ${formatNumberHumanize(data.price, 2)}
                       </div>
                     </div>
                     <div className="key-value mt-10">
@@ -299,7 +330,7 @@ export default function Nav() {
           </a>
           <div className="balance ml-10">
             <span className="qbert-balance">
-              {data.balance.toFixed(1)} QBERT
+              {formatNumberHumanize(data.balance, 1)} QBERT
             </span>
             <div className="wallet-info">
               <span
@@ -351,7 +382,7 @@ export default function Nav() {
           </a>
           <div className="balance ml-10">
             <span className="qbert-balance">
-              {data.balance.toFixed(1)} QBERT
+              {formatNumberHumanize(data.balance, 1)} QBERT
             </span>
             <div className="wallet-info">
               <span
@@ -372,7 +403,9 @@ export default function Nav() {
           <div className="break"></div>
           <div className="qbert-price">
             <img src={qbertpxl} />
-            <div className="txt ml-10 price">${data.price.toFixed(2)}</div>
+            <div className="txt ml-10 price">
+              ${formatNumberHumanize(data.price, 2)}
+            </div>
           </div>
           <Popup
             trigger={
@@ -398,12 +431,14 @@ export default function Nav() {
                   </div>
                   <div className="content">
                     <img src="images/qbert.png" />
-                    <div className="balance">{data.balance.toFixed(2)}</div>
+                    <div className="balance">
+                      {formatNumberHumanize(data.balance, 2)}
+                    </div>
 
                     <div className="key-value">
                       <div className="key">Price</div>
                       <div className="value qbert-price">
-                        ${data.price.toFixed(2)}
+                        ${formatNumberHumanize(data.price, 2)}
                       </div>
                     </div>
                     <div className="key-value mt-10">

@@ -36,7 +36,7 @@ export async function tryFetchPrice(token) {
     );
     const dataCoinGecko = resCoinGecko.data;
     if (dataCoinGecko?.[token]?.usd) {
-      return dataCoinGecko[token].usd;
+      return parseFloat(dataCoinGecko[token].usd);
     }
   } catch (error) {
     console.log("Fallo coingecko");
@@ -46,7 +46,7 @@ export async function tryFetchPrice(token) {
     let resDexGuru = await axios.get(`https://api.dex.guru/v1/tokens/${token}`);
     let dataDexGuru = resDexGuru.data;
     if (dataDexGuru?.priceUSD) {
-      return dataDexGuru.priceUSD;
+      return parseFloat(dataDexGuru.priceUSD);
     }
   } catch (error) {
     console.log("Fallo dexguru");

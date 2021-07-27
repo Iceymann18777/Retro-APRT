@@ -8,32 +8,35 @@ export default function Tvl() {
   var [timeLeft, setTimeLeft] = useState(5);
   var [loaded, setLoaded] = useState(false);
   var [text, setText] = useState("...");
-  useEffect(async () => {
-    if (!loaded) {
-      setLoaded(true);
-      setInterval(async () => {
-        const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
-        const web3 = getWeb3NoAccount();
-        let pool = new web3.eth.Contract(nativeFarmAbi, farmAddress);
-        var currentBlock = await web3.eth.getBlockNumber();
-        let startBlockHarvest = await pool.methods.startBlockHarvest().call();
-        var startBlock = await pool.methods.startBlock().call();
-        var startBlockTime = startBlock - currentBlock;
-        var startBlockHarvestTime = startBlockHarvest - currentBlock;
-        if (startBlockTime > 0) {
-          setTimeLeft(startBlockTime * 3);
-          setText("Farms Start");
-        } else if (startBlockHarvestTime > 0) {
-          setTimeLeft(startBlockHarvestTime * 3);
-          setText("Pending Locked");
-        } else {
-          setTimeLeft(0);
-        }
-        if (web3.eth && window.ts) {
-          setValue(window.ts.value);
-        }
-      }, 5000);
-    }
+  useEffect(() => {
+    const interval = setInterval(async () => {
+      if (!loaded) {
+        setLoaded(true);
+      }
+      const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
+      const web3 = getWeb3NoAccount();
+      let pool = new web3.eth.Contract(nativeFarmAbi, farmAddress);
+      var currentBlock = await web3.eth.getBlockNumber();
+      let startBlockHarvest = await pool.methods.startBlockHarvest().call();
+      var startBlock = await pool.methods.startBlock().call();
+      var startBlockTime = startBlock - currentBlock;
+      var startBlockHarvestTime = startBlockHarvest - currentBlock;
+      if (startBlockTime > 0) {
+        setTimeLeft(startBlockTime * 3);
+        setText("Farms Start");
+      } else if (startBlockHarvestTime > 0) {
+        setTimeLeft(startBlockHarvestTime * 3);
+        setText("Pending Locked");
+      } else {
+        setTimeLeft(0);
+      }
+      if (web3.eth && window.ts) {
+        setValue(window.ts.value);
+      }
+    }, 3000);
+    return () => {
+      clearInterval(interval);
+    };
   });
 
   function renderer({ hours, minutes, seconds, completed, api }) {
