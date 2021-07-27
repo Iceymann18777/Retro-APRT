@@ -15,7 +15,7 @@ const provider = new Web3Ext.providers.HttpProvider(
 );
 const web3ext = new Web3Ext(provider);
 async function getTokenPrice(poolAddress, decimals) {
-  var pool = new web3ext.Contract(poolAbi.data, poolAddress);
+  var pool = new Contract(poolAbi.data, poolAddress);
   let tokenInfo = await getTokensInfo(pool);
   //let bnbPrice = await axios.get("https://api.coingecko.com/api/v3/coins/binancecoin");
   let bnbPrice = await tryFetchPrice(wbnbAddress);
