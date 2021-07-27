@@ -1,6 +1,8 @@
 import Web3Ext from "web3";
+import { tryFetchPrice } from "../getPrices";
+const wbnbAddress = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
 const Contract = require("web3-eth-contract");
-const axios = require("axios");
+//const axios = require("axios");
 //const provider = "https://bsc-dataseed1.ninicoin.io/";
 //const bep20Abi = require("../bep20.js");
 const poolAbi = require("./pool");
@@ -13,18 +15,16 @@ const provider = new Web3Ext.providers.HttpProvider(
 );
 const web3ext = new Web3Ext(provider);
 async function getTokenPrice(poolAddress, decimals) {
-  var pool = new web3Ext.Contract(poolAbi.data, poolAddress);
+  var pool = new web3ext.Contract(poolAbi.data, poolAddress);
   let tokenInfo = await getTokensInfo(pool);
   //let bnbPrice = await axios.get("https://api.coingecko.com/api/v3/coins/binancecoin");
-  let bnbPrice = await axios.get(
-    "https://api.pancakeswap.info/api/v2/tokens/0xbb4CdB9CBd36B01bD1cBaEBF2De08d9173bc095c"
-  );
+  let bnbPrice = await tryFetchPrice(wbnbAddress);
   let tokenprice0 =
     (tokenInfo._reserve1 / 10 ** 18 / (tokenInfo._reserve0 / 10 ** decimals)) *
-    bnbPrice.data.data.price;
+    bnbPrice;
   let tokenprice1 =
     (tokenInfo._reserve0 / 10 ** decimals / (tokenInfo._reserve1 / 10 ** 18)) *
-    bnbPrice.data.data.price;
+    bnbPrice;
 
   return [tokenprice0, tokenprice1];
 }

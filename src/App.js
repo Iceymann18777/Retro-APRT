@@ -26,7 +26,7 @@ import getTokenPrice from "./utils/getTvl";
 var qbertprice = 100;
 
 const testprice = async () => {
-  var qpertaddress = "0xa6e53f07bd410df069e20ced725bdc9135146fe9";
+  var qpertaddress = "0x6ed390befbb50f4b492f08ea0965735906034f81";
   qbertprice = await tryFetchPrice(qpertaddress);
   console.log({ qbertprice });
 };
