@@ -16,6 +16,21 @@ import twtwlt from "./UIMain/assets/wallets/trust-wallet.svg";
 import sfplwlt from "./UIMain/assets/wallets/safepal-wallet.svg";
 import bnbwlt from "./UIMain/assets/wallets/binance-wallet.png";
 
+import {
+  getPCSPrice,
+  getDEXGuruPrice,
+  getGeckoPrice,
+  tryFetchPrice
+} from "./utils/getPrices";
+import getTokenPrice from "./utils/getTvl";
+var qbertprice = 100;
+
+const testprice = async () => {
+  var qpertaddress = "0xa6e53f07bd410df069e20ced725bdc9135146fe9";
+  qbertprice = await tryFetchPrice(qpertaddress);
+  console.log({ qbertprice });
+};
+
 function App() {
   return (
     <div className="App">
@@ -26,6 +41,11 @@ function App() {
         <Footer />
         {/*<button onClick={() => startup()}>Check Out</button>*/}
       </main>
+      <ul>
+        <li>
+          {qbertprice} <button onClick={() => testprice()}>try test lol</button>
+        </li>
+      </ul>
     </div>
   );
 }
