@@ -1,5 +1,5 @@
 import { useState, useEffect } from "react";
-import Web3Ext from "web3";
+import { getWeb3NoAccount } from "../../../../utils/web3Global";
 import util from "../../../../utils/aprLib/index";
 import BigNumber from "bignumber.js";
 import info from "../../../assets/svg/info-primary.svg";
@@ -15,10 +15,7 @@ const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 const BLOCKS_PER_DAY = new BigNumber((60 * 60 * 24) / 3);
 const BLOCKS_PER_YEAR = new BigNumber(BLOCKS_PER_DAY * 365);
 var QBERT_PERBLOCK = 0.58;
-const provider = new Web3Ext.providers.HttpProvider(
-  "https://bsc-dataseed3.defibit.io"
-);
-const web3ext = new Web3Ext(provider);
+const web3ext = getWeb3NoAccount();
 
 export default function Pool(props) {
   var [balance, setBalance] = useState(0);
