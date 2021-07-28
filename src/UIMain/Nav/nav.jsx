@@ -128,10 +128,9 @@ export default function Nav() {
   }
 
   useEffect(() => {
-    const interval = setInterval(async () => {
+    async function getQbertStats() {
       const web3ext = await getWeb3NoAccount();
       // hacer algo
-      //setInterval(async () => {
       if (!data.loaded) {
         try {
           if (window.account) {
@@ -154,7 +153,7 @@ export default function Nav() {
               ciculatingSupply: ciculatingSupply / 10 ** 18,
               price: price,
               marketCap: marketCap,
-              loaded: true
+              loaded: false
             });
           } else {
             let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
@@ -177,11 +176,13 @@ export default function Nav() {
           }
         } catch (error) {}
       }
+    }
+    async function update() {
+      await getQbertStats();
+    }
+    setInterval(function () {
+      update();
     }, 3000);
-    return () => {
-      clearInterval(interval);
-    };
-    //}, 5000);
   });
 
   return (
