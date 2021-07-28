@@ -3,12 +3,13 @@ import Nav from "./UIMain/Nav/nav.jsx";
 import Background from "./UIMain/body/background";
 import Farms from "./UIMain/body/farms/index";
 import Footer from "./UIMain/Footer";
-import Web3Modal from "web3modal";
-import WalletConnectProvider from "@walletconnect/web3-provider";
-import { connectors } from "web3modal";
+//import Web3Modal from "web3modal";
+//import WalletConnectProvider from "@walletconnect/web3-provider";
+//import { connectors } from "web3modal";
 //import logo from "./UIMain/assets/logos/QBERTSWAG.png";
 //import Web3 from "web3";
-import getWeb3 from "./utils/web3Utils";
+//import getWeb3 from "./utils/web3Utils";
+
 //import Util from "./utils/aprLib/index.js";
 //import nativeFarmAbi from "./utils/nativeFarmAbi.js";
 import mathwlt from "./UIMain/assets/wallets/math-wallet.svg";
@@ -31,7 +32,7 @@ const testprice = async () => {
   console.log({ qbertprice });
 };
 
-function App() {
+export default function App({ children }) {
   return (
     <div className="App">
       <main className="app preload">
@@ -49,5 +50,3 @@ function App() {
     </div>
   );
 }
-
-export default App;

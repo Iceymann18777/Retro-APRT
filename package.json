@@ -3,7 +3,11 @@
   "version": "1.0.0",
   "description": "React and TypeScript example starter project",
   "license": "MIT",
-  "keywords": ["typescript", "react", "starter"],
+  "keywords": [
+    "typescript",
+    "react",
+    "starter"
+  ],
   "dependencies": {
     "@babel/runtime": "7.14.0",
     "@pancakeswap-libs/uikit": "0.29.4",
@@ -21,6 +25,7 @@
     "react-dom": "17.0.2",
     "react-hooks": "1.0.1",
     "react-jsx": "1.0.0",
+    "react-redux": "7.2.4",
     "react-router-dom": "5.2.0",
     "react-scripts": "4.0.3",
     "react-typescript": "1.0.0",
@@ -43,5 +48,10 @@
     "test": "react-scripts test --env=jsdom",
     "eject": "react-scripts eject"
   },
-  "browserslist": [">0.2%", "not dead", "not ie <= 11", "not op_mini all"]
+  "browserslist": [
+    ">0.2%",
+    "not dead",
+    "not ie <= 11",
+    "not op_mini all"
+  ]
 }
