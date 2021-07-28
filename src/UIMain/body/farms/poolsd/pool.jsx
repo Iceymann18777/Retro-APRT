@@ -1,4 +1,5 @@
 import { useState, useEffect } from "react";
+import { tryFetchPrice } from "../../../../utils/getPrices";
 import { getWeb3NoAccount } from "../../../../utils/web3Global";
 import util from "../../../../utils/aprLib/index";
 import BigNumber from "bignumber.js";
@@ -127,11 +128,15 @@ export default function Pool(props) {
     let perUint =
       (poolAlloc / ((balance / 10 ** props.decimals) * price)) * 1.9;
     let tvl = (balance / 10 ** props.decimals) * price;
-
+    const qbertads = "0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f";
+    let qbrtprice = await tryFetchPrice(qbertads);
     const yearlyQbertRewardAllocation = new BigNumber(QBERT_PERBLOCK)
       .times(BLOCKS_PER_YEAR)
       .times(info.allocPoint / totalAlloc);
-    const apr = yearlyQbertRewardAllocation.times(0.23).div(tvl).times(100);
+    const apr = yearlyQbertRewardAllocation
+      .times(qbrtprice)
+      .div(tvl)
+      .times(100);
 
     //let apr = (BLOCKS_PER_DAY * (poolAlloc * 0.5)) / tvl;
     //let dd = 1.9 * (poolAlloc/3)  * 604800  * 52  / price / (balance / 10 ** props.decimals)
