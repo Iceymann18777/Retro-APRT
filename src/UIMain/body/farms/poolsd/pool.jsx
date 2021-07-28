@@ -17,7 +17,6 @@ const BLOCKS_PER_DAY = new BigNumber((60 * 60 * 24) / 3);
 const BLOCKS_PER_YEAR = new BigNumber(BLOCKS_PER_DAY * 365);
 var QBERT_PERBLOCK = 0.58;
 var QBERT_PRICE;
-const web3ext = getWeb3NoAccount();
 export default function Pool(props) {
   var [balance, setBalance] = useState(0);
   var [depositState, setDepositState] = useState(0);
@@ -46,6 +45,7 @@ export default function Pool(props) {
   };
   const loadPool = async () => {
     try {
+      const web3ext = getWeb3NoAccount();
       let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
       let pool = new web3ext.eth.Contract(poolAbi, farmAddress);
       let strategy = new web3ext.eth.Contract(strategyAbi, props.poolAddress);

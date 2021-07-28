@@ -17,8 +17,6 @@ import Web3 from "web3";
 //import Util from "./utils/aprLib/index.js";
 //import nativeFarmAbi from "./utils/nativeFarmAbi.js";
 
-const web3ext = getWeb3NoAccount();
-
 const wbnbAddress = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
 const qbertAddress = "0x6ED390Befbb50f4b492f08Ea0965735906034F81";
 const zeroAdress = "0x0000000000000000000000000000000000000000";
@@ -131,6 +129,7 @@ export default function Nav() {
 
   useEffect(() => {
     const interval = setInterval(async () => {
+      const web3ext = await getWeb3NoAccount();
       // hacer algo
       //setInterval(async () => {
       if (!data.loaded) {
