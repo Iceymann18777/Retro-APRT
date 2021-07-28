@@ -3,7 +3,7 @@ import { tryFetchPrice } from "../../../../utils/getPrices";
 import { getWeb3NoAccount } from "../../../../utils/web3Global";
 import util from "../../../../utils/aprLib/index";
 import BigNumber from "bignumber.js";
-import info from "../../../assets/svg/info-primary.svg";
+import { infoPry } from "../../../assets/svg";
 import $ from "jquery";
 import getBalance from "../../../../utils/tokenUtils";
 import { constants, utils } from "ethers";
@@ -485,7 +485,7 @@ export default function Pool(props) {
                 <span className="val">
                   {formatNumberSuffix(poolInfo.apr, 2)} %
                 </span>
-                <img className="tooltip" src={info}></img>
+                <img className="tooltip" src={infoPry}></img>
               </div>
             </div>
             <div className="info">

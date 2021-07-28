@@ -1,12 +1,10 @@
 import React, { useEffect, useState } from "react";
+import Popup from "reactjs-popup";
 import { tryFetchPrice } from "../../utils/getPrices";
 import { getWeb3NoAccount } from "../../utils/web3Global";
-import logo from "../assets/logos/logo.png";
-import qbertpxl from "../assets/logos/qbertpxl.png";
-import qbertdice from "../assets/logos/QBERTSWAG.png";
-import Popup from "reactjs-popup";
-import popupclose from "../assets/svg/popup-close.svg";
-import popupcopy from "../assets/svg/copy.svg";
+import { mathwlt, twtwlt, sfplwlt, bnbwlt } from "../../UIMain/assets/wallets";
+import { logo, qbertpxl, qbertdice } from "../assets/logos";
+import { popupclose, popupcopy } from "../assets/svg";
 import utils from "../../utils/aprLib/index";
 import { formatNumberHumanize } from "../../utils/formatBalance";
 import tokenAbi from "../../Resources/lib/abi/tokenAbi.json";
@@ -18,10 +16,6 @@ import Web3 from "web3";
 //import getWeb3 from "../../utils/web3Utils";
 //import Util from "./utils/aprLib/index.js";
 //import nativeFarmAbi from "./utils/nativeFarmAbi.js";
-import mathwlt from "../../UIMain/assets/wallets/math-wallet.svg";
-import twtwlt from "../../UIMain/assets/wallets/trust-wallet.svg";
-import sfplwlt from "../../UIMain/assets/wallets/safepal-wallet.svg";
-import bnbwlt from "../../UIMain/assets/wallets/binance-wallet.png";
 
 const web3ext = getWeb3NoAccount();
 
