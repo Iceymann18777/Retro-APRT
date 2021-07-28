@@ -148,6 +148,7 @@ export default function Nav() {
             let totalSupply = await qbert.methods.totalSupply().call();
             let ciculatingSupply = totalSupply - burnBalance;
             let price = await tryFetchPrice(qbertAddress);
+            window.qbertprice = price;
             //let price = await utils.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
             let marketCap = price * (ciculatingSupply / 10 ** 18);
             setData({

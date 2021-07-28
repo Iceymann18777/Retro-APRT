@@ -16,8 +16,8 @@ const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 const BLOCKS_PER_DAY = new BigNumber((60 * 60 * 24) / 3);
 const BLOCKS_PER_YEAR = new BigNumber(BLOCKS_PER_DAY * 365);
 var QBERT_PERBLOCK = 0.58;
+var QBERT_PRICE;
 const web3ext = getWeb3NoAccount();
-
 export default function Pool(props) {
   var [balance, setBalance] = useState(0);
   var [depositState, setDepositState] = useState(0);
@@ -35,14 +35,15 @@ export default function Pool(props) {
   });
   var [loaded, setLoaded] = useState(false);
   const loadall = async () => {
-    if (window.ethereum) {
-      try {
-        window.ts.times = 1;
-        await loadPool();
-      } catch (error) {}
+    if (window.qbertprice) {
+      if (window.ethereum) {
+        try {
+          window.ts.times = 1;
+          await loadPool();
+        } catch (error) {}
+      }
     }
   };
-
   const loadPool = async () => {
     try {
       let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
@@ -66,10 +67,8 @@ export default function Pool(props) {
       if (!poolInfo.price) {
         price = await tokenPrice();
       }
-      let qbertPrice = await util.getTokenPrice(
-        "0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",
-        18
-      );
+      //let qbertPrice = await util.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
+      let qbertPrice = window.qbertprice;
       let locked;
       if (props.token_address == "0xa6e53f07bD410df069e20Ced725bdC9135146Fe9") {
         let rcube = new web3ext.eth.Contract(rcubeAbi, props.token_address);
@@ -81,7 +80,6 @@ export default function Pool(props) {
           locked = false;
         }
       }
-
       let balance;
       if (!props.isLp || props.isLpCompund) {
         balance = await strategy.methods.wantLockedTotal().call();
@@ -91,7 +89,6 @@ export default function Pool(props) {
       if (props.poolAddress == "0xB9468Ee4bEf2979615855aB1Eb6718505b1BB756") {
         //console.log(price);
       }
-
       let total = (balance / 10 ** props.decimals) * price;
       let apr = await calculateApr(pool, balance, price);
       if (!window.ts.added.includes(props.token_address)) {
@@ -101,7 +98,6 @@ export default function Pool(props) {
           window.ts.deposited + (deposited / 10 ** props.decimals) * price;
         window.ts.added.push(props.token_address);
       }
-
       await setPoolInfo({
         pool,
         deposited,
@@ -118,7 +114,6 @@ export default function Pool(props) {
       console.log(error);
     }
   };
-
   async function calculateApr(pool, balance, price) {
     let info = await pool.methods.poolInfo(props.id).call();
     let totalAlloc = await pool.methods.totalAllocPoint().call();
@@ -128,19 +123,14 @@ export default function Pool(props) {
     let perUint =
       (poolAlloc / ((balance / 10 ** props.decimals) * price)) * 1.9;
     let tvl = (balance / 10 ** props.decimals) * price;
-    const qbertads = "0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f";
-    let qbrtprice = await tryFetchPrice(qbertads);
+    const qbprice = window.qbertprice;
     const yearlyQbertRewardAllocation = new BigNumber(QBERT_PERBLOCK)
       .times(BLOCKS_PER_YEAR)
       .times(info.allocPoint / totalAlloc);
-    const apr = yearlyQbertRewardAllocation
-      .times(qbrtprice)
-      .div(tvl)
-      .times(100);
+    const apr = yearlyQbertRewardAllocation.times(qbprice).div(tvl).times(100);
 
     //let apr = (BLOCKS_PER_DAY * (poolAlloc * 0.5)) / tvl;
     //let dd = 1.9 * (poolAlloc/3)  * 604800  * 52  / price / (balance / 10 ** props.decimals)
-
     const totalStaked = (balance / 10 ** props.decimals) * price;
     const totalRewardPricePerYear = new BigNumber(2)
       .times(poolAlloc)
@@ -149,7 +139,6 @@ export default function Pool(props) {
     //return apr * 365 * 50;
     return apr.isNaN() || !apr.isFinite() ? null : apr.toNumber();
   }
-
   const maxButton = async (param) => {
     if (param == "deposit") {
       setDepositState(balance);
@@ -161,7 +150,6 @@ export default function Pool(props) {
       elem[0].value = poolInfo.deposited / 10 ** props.decimals;
     }
   };
-
   const handdleInput = async (param, event) => {
     event.preventDefault();
     if (param == "withdraw" && event.target.value) {
@@ -178,7 +166,6 @@ export default function Pool(props) {
       }
     }
   };
-
   async function tokenPrice() {
     if (!props.isLp) {
       if (!props.isBNB) {
@@ -197,17 +184,14 @@ export default function Pool(props) {
         props.tokenDecimals
       );
       value = value[props.price.reserve] * 2;
-
       let tokenPrice = await util.getTokenPrice(
         props.price.bnnlpaddress,
         props.tokenDecimals
       );
-
       tokenPrice = tokenPrice[props.price.reserve];
       return value * tokenPrice;
     }
   }
-
   async function approve() {
     let token = new web3.eth.Contract(tokenAbi, props.token_address);
     await token.methods
@@ -217,7 +201,6 @@ export default function Pool(props) {
       .allowance(window.account, farmAddress)
       .call();
   }
-
   async function deposit() {
     if (balance >= depositState) {
       let depod = depositState.toLocaleString("fullwide", {
@@ -228,7 +211,6 @@ export default function Pool(props) {
       await pool.methods
         .deposit(props.id, amount)
         .send({ from: window.account });
-
       setTimeout(async () => {
         let tokenStakeds = await pool.methods
           .stakedWantTokens(props.id, window.account)
@@ -239,7 +221,6 @@ export default function Pool(props) {
       }, 4000);
     }
   }
-
   async function whitdraw() {
     if (poolInfo.deposited >= withdrawState) {
       let pool = new web3.eth.Contract(poolAbi, farmAddress);
@@ -250,7 +231,6 @@ export default function Pool(props) {
       await pool.methods
         .withdraw(props.id, amount)
         .send({ from: window.account });
-
       setTimeout(async () => {
         let tokenStakeds = await pool.methods
           .stakedWantTokens(props.id, window.account)
@@ -261,7 +241,6 @@ export default function Pool(props) {
       }, 4000);
     }
   }
-
   async function harvest() {
     let pool = new web3.eth.Contract(poolAbi, farmAddress);
     if (poolInfo.pending > 1e8) {
@@ -271,7 +250,6 @@ export default function Pool(props) {
         .call();
     }
   }
-
   useEffect(async () => {
     if (!loaded) {
       setLoaded(true);
@@ -283,12 +261,10 @@ export default function Pool(props) {
       };
     }
   });
-
   let sd = () => {
     $(`div.details.id${props.id}`).slideToggle(500);
     $(`div.pool-card.id${props.id}`).toggleClass("expanded", true);
   };
-
   return (
     <div
       className={`pool-card  highlighted radioactive  ${props.special} id${props.id}`}
@@ -351,7 +327,6 @@ export default function Pool(props) {
           </div>
           <div className="key">Deposited</div>
         </div>
-
         <div className="key-value daily shorter">
           <div className="val">
             {poolInfo.apr
@@ -528,7 +503,6 @@ export default function Pool(props) {
               <div className="itm head">
                 <span className="ttl">Farm</span>
               </div>
-
               <div className="itm qbert-daily-apy">
                 <span className="ttl">{props.name} TVL:&nbsp;</span>
                 <span className="val">
