@@ -25,6 +25,7 @@ import bnbwlt from "../../UIMain/assets/wallets/binance-wallet.png";
 
 const web3ext = getWeb3NoAccount();
 
+const wbnbAddress = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
 const qbertAddress = "0x6ED390Befbb50f4b492f08Ea0965735906034F81";
 const zeroAdress = "0x0000000000000000000000000000000000000000";
 const burnAddress = "0x000000000000000000000000000000000000dEaD";
@@ -147,8 +148,10 @@ export default function Nav() {
             let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
             let totalSupply = await qbert.methods.totalSupply().call();
             let ciculatingSupply = totalSupply - burnBalance;
+            let bnbPrice = await tryFetchPrice(wbnbAddress);
             let price = await tryFetchPrice(qbertAddress);
             window.qbertprice = price;
+            window.bnbprice = bnbPrice;
             //let price = await utils.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
             let marketCap = price * (ciculatingSupply / 10 ** 18);
             setData({
