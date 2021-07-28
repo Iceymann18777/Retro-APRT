@@ -175,7 +175,8 @@ a:visited {
   --c-primary-hover: #03a9f4;
   --c-secondary: #00d4ea78;
   --c-secondary-hover: #516471;
-  --c-terciary: #4dd7dd;
+  /*--c-terciary: #4dd7dd;*/
+  --c-terciary: #bb4ddd;
   --c-terciary-50: #4dd7dd7f;
   --c-exit: #ee057b;
   --t-shadow-1: 0 0 10px var(--c-primary);
@@ -1817,7 +1818,7 @@ main .content .app-version {
   border-radius: 50px;
 }
 
-.app .content .pools .pool-card.radioactive {
+/*.app .content .pools .pool-card.radioactive {
   left: -2px;
   width: calc(100% + 2px);
   border: var(--c-terciary) 2px solid;
@@ -1828,7 +1829,21 @@ main .content .app-version {
     var(--c-background-3) 83%,
     rgba(77, 215, 221, 0.5) 100%
   );
+}*/
+
+.app .content .pools .pool-card.radioactive {
+  left: -2px;
+  width: calc(100% + 2px);
+  border: var(--c-terciary) 2px solid;
+  box-shadow: var(--t-shadow-terciary-1);
+  background: var(--c-background-3);
+  background: linear-gradient(
+    321deg,
+    var(--c-background-3) 83%,
+    #bb4ddd 100%
+  );
 }
+
 
 .app .content .pools .pool-card.radioactive .details .line {
   background-color: var(--c-terciary);
