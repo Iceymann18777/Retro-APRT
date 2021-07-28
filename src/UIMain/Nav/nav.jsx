@@ -152,8 +152,7 @@ export default function Nav() {
             totalSupply: totalSupply / 10 ** 18,
             ciculatingSupply: ciculatingSupply / 10 ** 18,
             price: price,
-            marketCap: marketCap,
-            loaded: false
+            marketCap: marketCap
           });
         } else {
           let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
@@ -170,8 +169,7 @@ export default function Nav() {
             totalSupply: totalSupply / 10 ** 18,
             ciculatingSupply: ciculatingSupply / 10 ** 18,
             price: price,
-            marketCap: marketCap,
-            loaded: false
+            marketCap: marketCap
           });
         }
       } catch (error) {}
