@@ -45,7 +45,7 @@ export default function Pool(props) {
   };
   const loadPool = async () => {
     try {
-      const web3ext = getWeb3NoAccount();
+      const web3ext = await getWeb3NoAccount();
       let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
       let pool = new web3ext.eth.Contract(poolAbi, farmAddress);
       let strategy = new web3ext.eth.Contract(strategyAbi, props.poolAddress);
