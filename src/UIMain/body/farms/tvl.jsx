@@ -3,6 +3,8 @@ import { getWeb3NoAccount } from "../../../utils/web3Global";
 import { Fragment, useState, useEffect } from "react";
 import { formatNumberHumanize } from "../../../utils/formatBalance";
 import nativeFarmAbi from "../../../Resources/lib/abi/nativeFarmAbi.json";
+const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
+const web3 = getWeb3NoAccount();
 export default function Tvl() {
   var [value, setValue] = useState(0);
   var [timeLeft, setTimeLeft] = useState(5);
@@ -13,8 +15,6 @@ export default function Tvl() {
       if (!loaded) {
         setLoaded(true);
       }
-      const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
-      const web3 = getWeb3NoAccount();
       let pool = new web3.eth.Contract(nativeFarmAbi, farmAddress);
       var currentBlock = await web3.eth.getBlockNumber();
       let startBlockHarvest = await pool.methods.startBlockHarvest().call();
@@ -30,7 +30,7 @@ export default function Tvl() {
       } else {
         setTimeLeft(0);
       }
-      if (web3.eth && window.ts) {
+      if (web3 && window.ts) {
         setValue(window.ts.value);
       }
     }, 3000);
