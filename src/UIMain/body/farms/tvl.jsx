@@ -4,15 +4,15 @@ import { Fragment, useState, useEffect } from "react";
 import { formatNumberHumanize } from "../../../utils/formatBalance";
 import nativeFarmAbi from "../../../Resources/lib/abi/nativeFarmAbi.json";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
-const web3 = getWeb3NoAccount();
-let pool = new web3.eth.Contract(nativeFarmAbi, farmAddress);
 export default function Tvl() {
   var [value, setValue] = useState(0);
   var [timeLeft, setTimeLeft] = useState(5);
   var [loaded, setLoaded] = useState(false);
   var [text, setText] = useState("...");
   useEffect(() => {
-    const interval = setInterval(async () => {
+    async function getTVLGlobal() {
+      const web3 = await getWeb3NoAccount();
+      let pool = new web3.eth.Contract(nativeFarmAbi, farmAddress);
       if (!loaded) {
         setLoaded(true);
       }
@@ -33,7 +33,16 @@ export default function Tvl() {
       if (web3 && window.ts) {
         setValue(window.ts.value);
       }
+    }
+
+    async function update() {
+      await getTVLGlobal();
+    }
+    const interval = setInterval(() => {
+      // do something
+      update();
     }, 3000);
+
     return () => {
       clearInterval(interval);
     };
