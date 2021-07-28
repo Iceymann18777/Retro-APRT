@@ -12,17 +12,12 @@ const REACT_APP_NODE_3 = "https://bsc-dataseed.binance.org";
 // Ankr node test node
 const REACT_APP_NODE_4 = "https://binance.ankr.com/";
 
-// Web3Api by etherscan
-const REACT_APP_NODE_5 =
-  "https://bsc-mainnet.web3api.com/v1/CE5C7S3SSA4NNUV5WKFDX4I5R5TSWTI3SP";
-
 // Array of available nodes to connect to
 export const nodes = [
   REACT_APP_NODE_1,
   REACT_APP_NODE_2,
   REACT_APP_NODE_3,
-  REACT_APP_NODE_4,
-  REACT_APP_NODE_5
+  REACT_APP_NODE_4
 ];
 
 const getNodeUrl = () => {
