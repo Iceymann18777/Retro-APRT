@@ -255,7 +255,7 @@ export default function Pool(props) {
       setLoaded(true);
       const interval = setInterval(async () => {
         await loadall();
-      }, 3000);
+      }, 10000);
       return () => {
         clearInterval(interval);
       };
