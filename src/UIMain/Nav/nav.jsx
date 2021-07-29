@@ -133,9 +133,9 @@ export default function Nav() {
     // hacer algo
     //if (!data.loaded) {
     try {
+      let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
       if (window.account) {
         setAccount(window.account);
-        let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
         let balance = await qbert.methods.balanceOf(window.account).call();
         let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
         let totalSupply = await qbert.methods.totalSupply().call();
@@ -155,12 +155,14 @@ export default function Nav() {
           marketCap: marketCap
         });
       } else {
-        let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
         let balance = await qbert.methods.balanceOf(zeroAdress).call();
         let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
         let totalSupply = await qbert.methods.totalSupply().call();
         let ciculatingSupply = totalSupply - burnBalance;
+        let bnbPrice = await tryFetchPrice(wbnbAddress);
         let price = await tryFetchPrice(qbertAddress);
+        window.qbertprice = price;
+        window.bnbprice = bnbPrice;
         //let price = await utils.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
         let marketCap = price * (ciculatingSupply / 10 ** 18);
         setData({
@@ -185,7 +187,7 @@ export default function Nav() {
       // do something
       //updateNav();
       getQbertStats();
-    }, 6000);
+    }, 10000);
     return () => {
       clearInterval(interval);
     };
