@@ -15,7 +15,6 @@ import {
   poolAbi,
   strategyAbi
 } from "../../../../Resources/lib/abi";
-const qbrtprice = window.qbertprice;
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 
 export default function Pool(props) {
@@ -51,14 +50,14 @@ export default function Pool(props) {
     try {
       let balanced = await getBalance(props.token_address, window.account);
       setBalance(balanced);
-      var QBERT_PERBLOCK = await pool.methods.NATIVEPerBlock().call();
+      //var QBERT_PERBLOCK = await pool.methods.NATIVEPerBlock().call();
       let deposited = await pool.methods
         .stakedWantTokens(props.id, window.account)
         .call();
       let allowance = await token.methods
         .allowance(window.account, farmAddress)
         .call();
-      let pendingBefore = poolInfo.pending;
+      //let pendingBefore = poolInfo.pending;
       //console.log(pending);
       let pending = await pool.methods
         .pendingNATIVE(props.id, window.account)
@@ -89,7 +88,7 @@ export default function Pool(props) {
       if (props.poolAddress == "0xB9468Ee4bEf2979615855aB1Eb6718505b1BB756") {
         //console.log(price);
       }
-      let total = (balance / 10 ** props.decimals) * price;
+      //let total = (balance / 10 ** props.decimals) * price;
       let apr = await calculateApr(
         pool,
         balance,
@@ -215,14 +214,6 @@ export default function Pool(props) {
         .pendingNATIVE(props.id, window.account)
         .call();
     }
-  }
-  {
-    /*useEffect(async () => {
-    if (!loaded) {
-      setLoaded(true);
-      
-    }
-  });*/
   }
 
   useEffect(() => {
