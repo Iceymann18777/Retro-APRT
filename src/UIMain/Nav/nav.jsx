@@ -124,6 +124,7 @@ export default function Nav() {
     window.ethereum = new Web3(provider);
     const accounts = await web3.eth.getAccounts();
     window.account = accounts[0];
+    getQbertStats();
     window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
   }
 
@@ -135,7 +136,7 @@ export default function Nav() {
       if (window.account) {
         setAccount(window.account);
         let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
-        let balance = await qbert.methods.balanceOf(account).call();
+        let balance = await qbert.methods.balanceOf(window.account).call();
         let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
         let totalSupply = await qbert.methods.totalSupply().call();
         let ciculatingSupply = totalSupply - burnBalance;
