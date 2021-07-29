@@ -1,9 +1,13 @@
 import { useState, useEffect, useCallback } from "react";
-import { tryFetchPrice } from "../../../../utils/getPrices";
+import {
+  tryFetchPrice,
+  getCovalentPrice,
+  getDebankPrice
+} from "../../../../utils/getPrices";
 import { calculateApr } from "../../../../utils/apr";
 import { getWeb3NoAccount } from "../../../../utils/web3Global";
 import util from "../../../../utils/aprLib/index";
-import BigNumber from "bignumber.js";
+//import BigNumber from "bignumber.js";
 import { infoPry } from "../../../assets/svg";
 import $ from "jquery";
 import getBalance from "../../../../utils/tokenUtils";
@@ -19,7 +23,7 @@ const qbrtprice = window.qbertprice;
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 
 export default function Pool(props) {
-  var [loaded, setLoaded] = useState(false);
+  //var [loaded, setLoaded] = useState(false);
   var [balance, setBalance] = useState(0);
   var [depositState, setDepositState] = useState(0);
   var [withdrawState, setWithdrawState] = useState(0);
@@ -119,6 +123,7 @@ export default function Pool(props) {
       console.log(error);
     }
   };
+
   const maxButton = async (param) => {
     if (param == "deposit") {
       setDepositState(balance);
@@ -147,29 +152,13 @@ export default function Pool(props) {
     }
   };
   async function tokenPrice() {
+    let tokenPrice = 0;
     if (!props.isLp) {
-      if (!props.isBNB) {
-        let tokenPrice = await util.getTokenPrice(
-          props.price.lpaddress,
-          props.decimals
-        );
-        tokenPrice = tokenPrice[props.price.reserve];
-        return tokenPrice;
-      } else {
-        return 300;
-      }
+      tokenPrice = await tryFetchPrice(props.token_address);
+      return tokenPrice;
     } else {
-      let value = await util.getLpPrice(
-        props.price.lpaddress,
-        props.tokenDecimals
-      );
-      value = value[props.price.reserve] * 2;
-      let tokenPrice = await util.getTokenPrice(
-        props.price.bnnlpaddress,
-        props.tokenDecimals
-      );
-      tokenPrice = tokenPrice[props.price.reserve];
-      return value * tokenPrice;
+      tokenPrice = await getDebankPrice(props.token_address);
+      return tokenPrice;
     }
   }
   async function approve() {
