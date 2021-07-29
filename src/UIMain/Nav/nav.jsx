@@ -1,4 +1,4 @@
-import React, { useEffect, useState } from "react";
+import React, { useCallback, useEffect, useState } from "react";
 import Popup from "reactjs-popup";
 import { tryFetchPrice } from "../../utils/getPrices";
 import { getWeb3NoAccount } from "../../utils/web3Global";
@@ -127,66 +127,70 @@ export default function Nav() {
     window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
   }
 
+  const getQbertStats = useCallback(async () => {
+    const web3ext = await getWeb3NoAccount();
+    // hacer algo
+    //if (!data.loaded) {
+    try {
+      if (window.account) {
+        setAccount(window.account);
+        let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
+        let balance = await qbert.methods.balanceOf(account).call();
+        let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
+        let totalSupply = await qbert.methods.totalSupply().call();
+        let ciculatingSupply = totalSupply - burnBalance;
+        let bnbPrice = await tryFetchPrice(wbnbAddress);
+        let price = await tryFetchPrice(qbertAddress);
+        window.qbertprice = price;
+        window.bnbprice = bnbPrice;
+        //let price = await utils.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
+        let marketCap = price * (ciculatingSupply / 10 ** 18);
+        setData({
+          balance: balance / 10 ** 18,
+          burnBalance: burnBalance / 10 ** 18,
+          totalSupply: totalSupply / 10 ** 18,
+          ciculatingSupply: ciculatingSupply / 10 ** 18,
+          price: price,
+          marketCap: marketCap
+        });
+      } else {
+        let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
+        let balance = await qbert.methods.balanceOf(zeroAdress).call();
+        let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
+        let totalSupply = await qbert.methods.totalSupply().call();
+        let ciculatingSupply = totalSupply - burnBalance;
+        let price = await tryFetchPrice(qbertAddress);
+        //let price = await utils.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
+        let marketCap = price * (ciculatingSupply / 10 ** 18);
+        setData({
+          balance: balance / 10 ** 18,
+          burnBalance: burnBalance / 10 ** 18,
+          totalSupply: totalSupply / 10 ** 18,
+          ciculatingSupply: ciculatingSupply / 10 ** 18,
+          price: price,
+          marketCap: marketCap
+        });
+      }
+    } catch (error) {
+      console.log(error);
+    }
+    //}
+  }, []);
+
   useEffect(() => {
-    async function getQbertStats() {
-      const web3ext = await getWeb3NoAccount();
-      // hacer algo
-      //if (!data.loaded) {
-      try {
-        if (window.account) {
-          setAccount(window.account);
-          let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
-          let balance = await qbert.methods.balanceOf(account).call();
-          let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
-          let totalSupply = await qbert.methods.totalSupply().call();
-          let ciculatingSupply = totalSupply - burnBalance;
-          let bnbPrice = await tryFetchPrice(wbnbAddress);
-          let price = await tryFetchPrice(qbertAddress);
-          window.qbertprice = price;
-          window.bnbprice = bnbPrice;
-          //let price = await utils.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
-          let marketCap = price * (ciculatingSupply / 10 ** 18);
-          setData({
-            balance: balance / 10 ** 18,
-            burnBalance: burnBalance / 10 ** 18,
-            totalSupply: totalSupply / 10 ** 18,
-            ciculatingSupply: ciculatingSupply / 10 ** 18,
-            price: price,
-            marketCap: marketCap
-          });
-        } else {
-          let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
-          let balance = await qbert.methods.balanceOf(zeroAdress).call();
-          let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
-          let totalSupply = await qbert.methods.totalSupply().call();
-          let ciculatingSupply = totalSupply - burnBalance;
-          let price = await tryFetchPrice(qbertAddress);
-          //let price = await utils.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
-          let marketCap = price * (ciculatingSupply / 10 ** 18);
-          setData({
-            balance: balance / 10 ** 18,
-            burnBalance: burnBalance / 10 ** 18,
-            totalSupply: totalSupply / 10 ** 18,
-            ciculatingSupply: ciculatingSupply / 10 ** 18,
-            price: price,
-            marketCap: marketCap
-          });
-        }
-      } catch (error) {}
-      //}
-    }
-    async function updateNav() {
-      await getQbertStats();
-    }
+    //async function updateNav() {await getQbertStats();}
+    getQbertStats();
+
     const interval = setInterval(() => {
       // do something
-      updateNav();
+      //updateNav();
+      getQbertStats();
     }, 6000);
 
     return () => {
       clearInterval(interval);
     };
-  });
+  }, [getQbertStats]);
 
   return (
     <header>
