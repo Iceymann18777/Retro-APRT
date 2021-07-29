@@ -125,7 +125,6 @@ export default function Nav() {
     const accounts = await web3.eth.getAccounts();
     window.account = accounts[0];
     getQbertStats();
-    window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
   }
 
   const getQbertStats = useCallback(async () => {
@@ -181,6 +180,7 @@ export default function Nav() {
   }, []);
 
   useEffect(() => {
+    window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
     //async function updateNav() {await getQbertStats();}
     getQbertStats();
     const interval = setInterval(() => {

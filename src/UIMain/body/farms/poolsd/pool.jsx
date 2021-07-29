@@ -1,4 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
+import Web3 from "web3";
 import { tryFetchPrice, tryFetchLPPrice } from "../../../../utils/getPrices";
 import { calculateApr } from "../../../../utils/apr";
 import { getWeb3NoAccount } from "../../../../utils/web3Global";
@@ -122,105 +123,10 @@ export default function Pool(props) {
             userBalance: balanced,
             locked
           });
-
-          const maxButton = async (param) => {
-            if (param == "deposit") {
-              setDepositState(balance);
-              let elem = document.getElementsByClassName(
-                "depositInput" + props.id
-              );
-              elem[0].value = balance / 10 ** props.decimals;
-            } else if (param == "withdraw") {
-              setWithdrawState(poolInfo.deposited);
-              let elem = document.getElementsByClassName(
-                "withdrawInput" + props.id
-              );
-              elem[0].value = poolInfo.deposited / 10 ** props.decimals;
-            }
-          };
-          const handdleInput = async (param, event) => {
-            event.preventDefault();
-            if (param == "withdraw" && event.target.value) {
-              if (event.target.value) {
-                setWithdrawState(
-                  parseFloat(event.target.value) * 10 ** props.decimals
-                );
-              } else {
-                setWithdrawState(0);
-              }
-            } else if (event.target.value) {
-              if (event.target.value) {
-                setDepositState(
-                  parseFloat(event.target.value) * 10 ** props.decimals
-                );
-              } else {
-                setDepositState(0);
-              }
-            }
-          };
-
-          async function approve() {
-            let token = new web3.eth.Contract(tokenAbi, props.token_address);
-            await token.methods
-              .approve(farmAddress, constants.MaxUint256)
-              .send({ from: window.account });
-            let allowance = await token.methods
-              .allowance(window.account, farmAddress)
-              .call();
-          }
-          async function deposit() {
-            if (balance >= depositState) {
-              let depod = depositState.toLocaleString("fullwide", {
-                useGrouping: false
-              });
-              let pool = new web3.eth.Contract(poolAbi, farmAddress);
-              let amount = new Web3.utils.toBN(depod).toString();
-              await pool.methods
-                .deposit(props.id, amount)
-                .send({ from: window.account });
-              setTimeout(async () => {
-                let tokenStakeds = await pool.methods
-                  .stakedWantTokens(props.id, window.account)
-                  .call();
-                window.ts.deposited =
-                  window.ts.deposited +
-                  (tokenStakeds / 10 ** props.decimals) * poolInfo.price;
-              }, 4000);
-            }
-          }
-          async function whitdraw() {
-            if (poolInfo.deposited >= withdrawState) {
-              let pool = new web3.eth.Contract(poolAbi, farmAddress);
-              let withs = withdrawState.toLocaleString("fullwide", {
-                useGrouping: false
-              });
-              let amount = new Web3.utils.toBN(withs).toString();
-              await pool.methods
-                .withdraw(props.id, amount)
-                .send({ from: window.account });
-              setTimeout(async () => {
-                let tokenStakeds = await pool.methods
-                  .stakedWantTokens(props.id, window.account)
-                  .call();
-                window.ts.deposited =
-                  window.ts.deposited -
-                  (tokenStakeds / 10 ** props.decimals) * poolInfo.price;
-              }, 4000);
-            }
-          }
-          async function harvest() {
-            let pool = new web3.eth.Contract(poolAbi, farmAddress);
-            if (poolInfo.pending > 1e8) {
-              await pool.methods
-                .withdraw(props.id, 0)
-                .send({ from: window.account });
-              let pendingQbert = await pool.methods
-                .pendingNATIVE(props.id, window.account)
-                .call();
-            }
-          }
         } else {
           let balanced = 0;
+          setBalance(balanced);
+
           //var QBERT_PERBLOCK = await pool.methods.NATIVEPerBlock().call();
           let deposited = 0;
           let allowance = 0;
@@ -302,13 +208,100 @@ export default function Pool(props) {
     }
   }
 
+  const maxButton = async (param) => {
+    if (param == "deposit") {
+      setDepositState(balance);
+      let elem = document.getElementsByClassName("depositInput" + props.id);
+      elem[0].value = balance / 10 ** props.decimals;
+    } else if (param == "withdraw") {
+      setWithdrawState(poolInfo.deposited);
+      let elem = document.getElementsByClassName("withdrawInput" + props.id);
+      elem[0].value = poolInfo.deposited / 10 ** props.decimals;
+    }
+  };
+  const handdleInput = async (param, event) => {
+    event.preventDefault();
+    if (param == "withdraw" && event.target.value) {
+      if (event.target.value) {
+        setWithdrawState(parseFloat(event.target.value) * 10 ** props.decimals);
+      } else {
+        setWithdrawState(0);
+      }
+    } else if (event.target.value) {
+      if (event.target.value) {
+        setDepositState(parseFloat(event.target.value) * 10 ** props.decimals);
+      } else {
+        setDepositState(0);
+      }
+    }
+  };
+
+  async function approve() {
+    let token = new web3.eth.Contract(tokenAbi, props.token_address);
+    await token.methods
+      .approve(farmAddress, constants.MaxUint256)
+      .send({ from: window.account });
+    let allowance = await token.methods
+      .allowance(window.account, farmAddress)
+      .call();
+  }
+  async function deposit() {
+    if (balance >= depositState) {
+      let depod = depositState.toLocaleString("fullwide", {
+        useGrouping: false
+      });
+      let pool = new web3.eth.Contract(poolAbi, farmAddress);
+      let amount = new Web3.utils.toBN(depod).toString();
+      await pool.methods
+        .deposit(props.id, amount)
+        .send({ from: window.account });
+      setTimeout(async () => {
+        let tokenStakeds = await pool.methods
+          .stakedWantTokens(props.id, window.account)
+          .call();
+        window.ts.deposited =
+          window.ts.deposited +
+          (tokenStakeds / 10 ** props.decimals) * poolInfo.price;
+      }, 4000);
+    }
+  }
+  async function whitdraw() {
+    if (poolInfo.deposited >= withdrawState) {
+      let pool = new web3.eth.Contract(poolAbi, farmAddress);
+      let withs = withdrawState.toLocaleString("fullwide", {
+        useGrouping: false
+      });
+      let amount = new Web3.utils.toBN(withs).toString();
+      await pool.methods
+        .withdraw(props.id, amount)
+        .send({ from: window.account });
+      setTimeout(async () => {
+        let tokenStakeds = await pool.methods
+          .stakedWantTokens(props.id, window.account)
+          .call();
+        window.ts.deposited =
+          window.ts.deposited -
+          (tokenStakeds / 10 ** props.decimals) * poolInfo.price;
+      }, 4000);
+    }
+  }
+  async function harvest() {
+    let pool = new web3.eth.Contract(poolAbi, farmAddress);
+    if (poolInfo.pending > 1e8) {
+      await pool.methods.withdraw(props.id, 0).send({ from: window.account });
+      let pendingQbert = await pool.methods
+        .pendingNATIVE(props.id, window.account)
+        .call();
+    }
+  }
+
   useEffect(() => {
     //loadall();
     loadPool();
     const interval = setInterval(() => {
       //loadall();
       loadPool();
-    }, 6000);
+    }, 10000);
     return () => {
       clearInterval(interval);
     };
