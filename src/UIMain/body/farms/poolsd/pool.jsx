@@ -432,7 +432,8 @@ export default function Pool(props) {
               <span style={{ fontSize: 13 }} className="value">
                 {" "}
                 ($
-                {((poolInfo.pending / 10 ** 18) * poolInfo.qbertPrice).toFixed(
+                {formatNumberSuffix(
+                  (poolInfo.pending / 10 ** 18) * window.qbertprice,
                   2
                 )}
                 )
