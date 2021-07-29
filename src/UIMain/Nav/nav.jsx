@@ -182,7 +182,7 @@ export default function Nav() {
       // do something
       //update();
       getQbertStats();
-    }, 3000);
+    }, 6000);
 
     return () => {
       clearInterval(interval);
