@@ -2,7 +2,7 @@ import Countdown from "react-countdown";
 import { getWeb3NoAccount } from "../../../utils/web3Global";
 import { Fragment, useState, useEffect, useCallback } from "react";
 import { formatNumberHumanize } from "../../../utils/formatBalance";
-import nativeFarmAbi from "../../../Resources/lib/abi/nativeFarmAbi.json";
+import { nativeFarmAbi } from "../../../Resources/lib/abi";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 export default function Tvl() {
   var [value, setValue] = useState(0);

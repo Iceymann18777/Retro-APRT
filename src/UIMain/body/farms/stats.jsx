@@ -1,31 +1,37 @@
-import { useState, useEffect } from "react";
-import poolAbi from "../../../Resources/lib/abi/nativeFarmAbi.json";
+import { useState, useEffect, useCallback } from "react";
+import { poolAbi } from "../../../Resources/lib/abi";
 import config from "../../../pools_config.json";
 import { formatNumberHumanize } from "../../../utils/formatBalance";
 //import Web3 from "web3";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 export default function Stats() {
-  let [data, setData] = useState({ pending: 0, deposit: 0, loaded: false });
-  useEffect(() => {
-    const interval = setInterval(async () => {
-      if (!data.loaded) {
-        setData({ loaded: true });
-      }
+  let [data, setData] = useState({ pending: 0, deposit: 0 });
+
+  const getUserStats = useCallback(async () => {
+    try {
       if (web3.eth) {
         await loadPending();
         if (window.ts) {
           setData({
             pending: window.ts.pending,
-            deposited: window.ts.deposited,
-            loaded: true
+            deposited: window.ts.deposited
           });
         }
       }
+    } catch (error) {
+      console.log(error);
+    }
+  }, []);
+
+  useEffect(() => {
+    getUserStats();
+    const interval = setInterval(async () => {
+      getUserStats();
     }, 3000);
     return () => {
       clearInterval(interval);
     };
-  });
+  }, [getUserStats]);
 
   async function loadPending(params) {
     let pool = new web3.eth.Contract(poolAbi, farmAddress);

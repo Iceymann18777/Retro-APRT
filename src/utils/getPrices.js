@@ -6,7 +6,7 @@ export async function getPCSPrice(token) {
   );
   const dataPancakeSwap = resPancakeSwap.data;
   if (dataPancakeSwap?.data?.price) {
-    return parseFloat(dataPancakeSwap.data.price);
+    return dataPancakeSwap.data.price;
   }
 }
 
@@ -25,6 +25,27 @@ export async function getGeckoPrice(token) {
   const dataCoinGecko = resCoinGecko.data;
   if (dataCoinGecko?.[token]?.usd) {
     return dataCoinGecko[token].usd;
+  }
+}
+
+export async function getDebankPrice(token) {
+  const resDebank = await axios.get(
+    `https://openapi.debank.com/v1/token?chain_id=bsc&id=${token}`
+  );
+  const dataDebank = resDebank.data;
+  if (dataDebank) {
+    return dataDebank.price;
+  }
+}
+
+export async function getCovalentPrice(token) {
+  const resCovalent = await axios.get(
+    `https://api.covalenthq.com/v1/56/networks/pancakeswap_v2/assets/${token}/?&key=ckey_a4ddd369f1ab4c52b3d07589264`
+  );
+  const dataCovalent = resCovalent.data;
+  const preresponse = dataCovalent.data.items.[0];
+  if (preresponse) {
+    return preresponse.quote_rate;
   }
 }
 

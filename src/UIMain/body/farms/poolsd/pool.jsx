@@ -1,4 +1,4 @@
-import { useState, useEffect } from "react";
+import { useState, useEffect, useCallback } from "react";
 import { tryFetchPrice } from "../../../../utils/getPrices";
 import { calculateApr } from "../../../../utils/apr";
 import { getWeb3NoAccount } from "../../../../utils/web3Global";
@@ -9,14 +9,17 @@ import $ from "jquery";
 import getBalance from "../../../../utils/tokenUtils";
 import { constants, utils } from "ethers";
 import { formatNumberSuffix } from "../../../../utils/formatBalance";
-import tokenAbi from "../../../../Resources/lib/abi/tokenAbi";
-import rcubeAbi from "../../../../Resources/lib/abi/rcubeAbi";
-import poolAbi from "../../../../Resources/lib/abi/nativeFarmAbi";
-import strategyAbi from "../../../../Resources/lib/abi/strategyAbi";
+import {
+  tokenAbi,
+  rcubeAbi,
+  poolAbi,
+  strategyAbi
+} from "../../../../Resources/lib/abi";
 const qbrtprice = window.qbertprice;
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 
 export default function Pool(props) {
+  var [loaded, setLoaded] = useState(false);
   var [balance, setBalance] = useState(0);
   var [depositState, setDepositState] = useState(0);
   var [withdrawState, setWithdrawState] = useState(0);
@@ -30,8 +33,7 @@ export default function Pool(props) {
     apr: 0,
     locked: true
   });
-  var [loaded, setLoaded] = useState(false);
-  const loadall = async () => {
+  const loadall = useCallback(async () => {
     if (window.qbertprice) {
       if (window.ethereum) {
         try {
@@ -40,13 +42,13 @@ export default function Pool(props) {
         } catch (error) {}
       }
     }
-  };
+  }, []);
   const loadPool = async () => {
+    const web3ext = await getWeb3NoAccount();
+    let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
+    let pool = new web3ext.eth.Contract(poolAbi, farmAddress);
+    let strategy = new web3ext.eth.Contract(strategyAbi, props.poolAddress);
     try {
-      const web3ext = await getWeb3NoAccount();
-      let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
-      let pool = new web3ext.eth.Contract(poolAbi, farmAddress);
-      let strategy = new web3ext.eth.Contract(strategyAbi, props.poolAddress);
       let balanced = await getBalance(props.token_address, window.account);
       setBalance(balanced);
       var QBERT_PERBLOCK = await pool.methods.NATIVEPerBlock().call();
@@ -228,17 +230,25 @@ export default function Pool(props) {
         .call();
     }
   }
-  useEffect(async () => {
+  {
+    /*useEffect(async () => {
     if (!loaded) {
       setLoaded(true);
-      const interval = setInterval(async () => {
-        await loadall();
-      }, 10000);
-      return () => {
-        clearInterval(interval);
-      };
+      
     }
-  });
+  });*/
+  }
+
+  useEffect(() => {
+    loadall();
+    const interval = setInterval(() => {
+      loadall();
+    }, 6000);
+    return () => {
+      clearInterval(interval);
+    };
+  }, [loadall]);
+
   let sd = () => {
     $(`div.details.id${props.id}`).slideToggle(500);
     $(`div.pool-card.id${props.id}`).toggleClass("expanded", true);

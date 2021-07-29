@@ -12,23 +12,21 @@ import Footer from "./UIMain/Footer";
 
 //import Util from "./utils/aprLib/index.js";
 //import nativeFarmAbi from "./utils/nativeFarmAbi.js";
-import mathwlt from "./UIMain/assets/wallets/math-wallet.svg";
-import twtwlt from "./UIMain/assets/wallets/trust-wallet.svg";
-import sfplwlt from "./UIMain/assets/wallets/safepal-wallet.svg";
-import bnbwlt from "./UIMain/assets/wallets/binance-wallet.png";
 
 import {
   getPCSPrice,
   getDEXGuruPrice,
   getGeckoPrice,
-  tryFetchPrice
+  tryFetchPrice,
+  getDebankPrice,
+  getCovalentPrice
 } from "./utils/getPrices";
-import getTokenPrice from "./utils/getTvl";
+//import getTokenPrice from "./utils/getTvl";
 var qbertprice = 100;
 
 const testprice = async () => {
-  var qpertaddress = "0x6ed390befbb50f4b492f08ea0965735906034f81";
-  qbertprice = await tryFetchPrice(qpertaddress);
+  var qpertaddress = "0x0ed7e52944161450477ee417de9cd3a859b14fd0";
+  qbertprice = await getCovalentPrice(qpertaddress);
   console.log({ qbertprice });
 };
 
