@@ -1,9 +1,5 @@
 import { useState, useEffect, useCallback } from "react";
-import {
-  tryFetchPrice,
-  getCovalentPrice,
-  getDebankPrice
-} from "../../../../utils/getPrices";
+import { tryFetchPrice, tryFetchLPPrice } from "../../../../utils/getPrices";
 import { calculateApr } from "../../../../utils/apr";
 import { getWeb3NoAccount } from "../../../../utils/web3Global";
 import util from "../../../../utils/aprLib/index";
@@ -157,7 +153,8 @@ export default function Pool(props) {
       tokenPrice = await tryFetchPrice(props.token_address);
       return tokenPrice;
     } else {
-      tokenPrice = await getDebankPrice(props.token_address);
+      tokenPrice = await tryFetchLPPrice(props.token_address);
+      console.log({ tokenPrice });
       return tokenPrice;
     }
   }

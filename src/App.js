@@ -19,14 +19,15 @@ import {
   getGeckoPrice,
   tryFetchPrice,
   getDebankPrice,
-  getCovalentPrice
+  getCovalentPrice,
+  tryFetchLPPrice
 } from "./utils/getPrices";
 //import getTokenPrice from "./utils/getTvl";
 var qbertprice = 100;
 
 const testprice = async () => {
-  var qpertaddress = "0x0ed7e52944161450477ee417de9cd3a859b14fd0";
-  qbertprice = await getCovalentPrice(qpertaddress);
+  var qpertaddress = "0x075da65514bc2af2508314f8a3150ca660e6eea1";
+  qbertprice = await tryFetchLPPrice(qpertaddress);
   console.log({ qbertprice });
 };
 

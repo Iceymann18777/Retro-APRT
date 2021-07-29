@@ -43,8 +43,8 @@ export async function getCovalentPrice(token) {
     `https://api.covalenthq.com/v1/56/networks/pancakeswap_v2/assets/${token}/?&key=ckey_a4ddd369f1ab4c52b3d07589264`
   );
   const dataCovalent = resCovalent.data;
-  const preresponse = dataCovalent.data.items.[0];
-  if (preresponse) {
+  const preresponse = dataCovalent.data.items[0];
+  if (preresponse?.quote_rate) {
     return preresponse.quote_rate;
   }
 }
@@ -79,4 +79,25 @@ export async function tryFetchPrice(token) {
   }
 
   return 0;
+}
+
+export async function tryFetchLPPrice(token) {
+  // try covalent API
+  try {
+    const covalentPrice = await getCovalentPrice(token);
+    if (covalentPrice) {
+      return covalentPrice;
+    }
+  } catch (error) {
+    console.log("Fallo covalent API");
+  }
+  // try Debank api
+  try {
+    const DebankPrice = await getDebankPrice(token);
+    if (DebankPrice) {
+      return DebankPrice;
+    }
+  } catch (error) {
+    console.log("Debank fallo");
+  }
 }
