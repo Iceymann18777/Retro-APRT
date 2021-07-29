@@ -181,7 +181,7 @@ export default function Nav() {
     const interval = setInterval(() => {
       // do something
       updateNav();
-    }, 3000);
+    }, 6000);
 
     return () => {
       clearInterval(interval);
