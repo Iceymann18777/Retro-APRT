@@ -52,11 +52,55 @@ export default function Pool(props) {
     let strategy = new web3ext.eth.Contract(strategyAbi, props.poolAddress);
     try {
       if (window.qbertprice) {
+        var deposited;
+        var price;
+        if (!poolInfo.price) {
+          price = await tokenPrice();
+        }
+        //let qbertPrice = await util.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
+        //let qbertPrice = window.qbertprice;
+        var locked;
+        if (
+          props.token_address == "0xa6e53f07bD410df069e20Ced725bdC9135146Fe9"
+        ) {
+          let rcube = new web3ext.eth.Contract(rcubeAbi, props.token_address);
+          let burnAmount = await rcube.methods._getBurnLevy.call().call();
+          console.log(burnAmount);
+          if (burnAmount > 1) {
+            locked = true;
+          } else {
+            locked = false;
+          }
+        }
+        var balance = 0;
+        if (!props.isLp || props.isLpCompund) {
+          balance = await strategy.methods.wantLockedTotal().call();
+        } else {
+          balance = await token.methods.balanceOf(props.poolAddress).call();
+        }
+        if (props.poolAddress == "0xB9468Ee4bEf2979615855aB1Eb6718505b1BB756") {
+          //console.log(price);
+        }
+        //let total = (balance / 10 ** props.decimals) * price;
+        let apr = await calculateApr(
+          pool,
+          balance,
+          price,
+          props.id,
+          props.decimals
+        );
+        if (!window.ts.added.includes(props.token_address)) {
+          window.ts.value =
+            window.ts.value + (balance / 10 ** props.decimals) * price;
+          window.ts.deposited =
+            window.ts.deposited + (deposited / 10 ** props.decimals) * price;
+          window.ts.added.push(props.token_address);
+        }
         if (window.account) {
           let balanced = await getBalance(props.token_address, window.account);
           setBalance(balanced);
           //var QBERT_PERBLOCK = await pool.methods.NATIVEPerBlock().call();
-          let deposited = await pool.methods
+          deposited = await pool.methods
             .stakedWantTokens(props.id, window.account)
             .call();
           let allowance = await token.methods
@@ -67,51 +111,7 @@ export default function Pool(props) {
           let pending = await pool.methods
             .pendingNATIVE(props.id, window.account)
             .call();
-          let price;
-          if (!poolInfo.price) {
-            price = await tokenPrice();
-          }
-          //let qbertPrice = await util.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
-          //let qbertPrice = window.qbertprice;
-          let locked;
-          if (
-            props.token_address == "0xa6e53f07bD410df069e20Ced725bdC9135146Fe9"
-          ) {
-            let rcube = new web3ext.eth.Contract(rcubeAbi, props.token_address);
-            let burnAmount = await rcube.methods._getBurnLevy.call().call();
-            console.log(burnAmount);
-            if (burnAmount > 1) {
-              locked = true;
-            } else {
-              locked = false;
-            }
-          }
-          let balance;
-          if (!props.isLp || props.isLpCompund) {
-            balance = await strategy.methods.wantLockedTotal().call();
-          } else {
-            balance = await token.methods.balanceOf(props.poolAddress).call();
-          }
-          if (
-            props.poolAddress == "0xB9468Ee4bEf2979615855aB1Eb6718505b1BB756"
-          ) {
-            //console.log(price);
-          }
-          //let total = (balance / 10 ** props.decimals) * price;
-          let apr = await calculateApr(
-            pool,
-            balance,
-            price,
-            props.id,
-            props.decimals
-          );
-          if (!window.ts.added.includes(props.token_address)) {
-            window.ts.value =
-              window.ts.value + (balance / 10 ** props.decimals) * price;
-            window.ts.deposited =
-              window.ts.deposited + (deposited / 10 ** props.decimals) * price;
-            window.ts.added.push(props.token_address);
-          }
+
           setPoolInfo({
             pool,
             deposited,
@@ -133,51 +133,7 @@ export default function Pool(props) {
           //let pendingBefore = poolInfo.pending;
           //console.log(pending);
           let pending = 0;
-          let price;
-          if (!poolInfo.price) {
-            price = await tokenPrice();
-          }
-          //let qbertPrice = await util.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
-          //let qbertPrice = window.qbertprice;
-          let locked;
-          if (
-            props.token_address == "0xa6e53f07bD410df069e20Ced725bdC9135146Fe9"
-          ) {
-            let rcube = new web3ext.eth.Contract(rcubeAbi, props.token_address);
-            let burnAmount = await rcube.methods._getBurnLevy.call().call();
-            console.log(burnAmount);
-            if (burnAmount > 1) {
-              locked = true;
-            } else {
-              locked = false;
-            }
-          }
-          let balance;
-          if (!props.isLp || props.isLpCompund) {
-            balance = await strategy.methods.wantLockedTotal().call();
-          } else {
-            balance = await token.methods.balanceOf(props.poolAddress).call();
-          }
-          if (
-            props.poolAddress == "0xB9468Ee4bEf2979615855aB1Eb6718505b1BB756"
-          ) {
-            //console.log(price);
-          }
-          //let total = (balance / 10 ** props.decimals) * price;
-          let apr = await calculateApr(
-            pool,
-            balance,
-            price,
-            props.id,
-            props.decimals
-          );
-          if (!window.ts.added.includes(props.token_address)) {
-            window.ts.value =
-              window.ts.value + (balance / 10 ** props.decimals) * price;
-            window.ts.deposited =
-              window.ts.deposited + (deposited / 10 ** props.decimals) * price;
-            window.ts.added.push(props.token_address);
-          }
+
           setPoolInfo({
             pool,
             deposited,
