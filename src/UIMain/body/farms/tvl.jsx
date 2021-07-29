@@ -7,31 +7,33 @@ const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 export default function Tvl() {
   var [value, setValue] = useState(0);
   var [timeLeft, setTimeLeft] = useState(5);
-  var [loaded, setLoaded] = useState(false);
+  //var [loaded, setLoaded] = useState(false);
   var [text, setText] = useState("...");
 
   const getTVLGlobal = useCallback(async () => {
     const web3 = await getWeb3NoAccount();
-    let pool = new web3.eth.Contract(nativeFarmAbi, farmAddress);
-    if (!loaded) {
-      setLoaded(true);
-    }
-    var currentBlock = await web3.eth.getBlockNumber();
-    let startBlockHarvest = await pool.methods.startBlockHarvest().call();
-    var startBlock = await pool.methods.startBlock().call();
-    var startBlockTime = startBlock - currentBlock;
-    var startBlockHarvestTime = startBlockHarvest - currentBlock;
-    if (startBlockTime > 0) {
-      setTimeLeft(startBlockTime * 3);
-      setText("Farms Start");
-    } else if (startBlockHarvestTime > 0) {
-      setTimeLeft(startBlockHarvestTime * 3);
-      setText("Pending Locked");
-    } else {
-      setTimeLeft(0);
-    }
-    if (web3 && window.ts) {
-      setValue(window.ts.value);
+    try {
+      let pool = new web3.eth.Contract(nativeFarmAbi, farmAddress);
+      //if (!loaded) {setLoaded(true);}
+      var currentBlock = await web3.eth.getBlockNumber();
+      let startBlockHarvest = await pool.methods.startBlockHarvest().call();
+      var startBlock = await pool.methods.startBlock().call();
+      var startBlockTime = startBlock - currentBlock;
+      var startBlockHarvestTime = startBlockHarvest - currentBlock;
+      if (startBlockTime > 0) {
+        setTimeLeft(startBlockTime * 3);
+        setText("Farms Start");
+      } else if (startBlockHarvestTime > 0) {
+        setTimeLeft(startBlockHarvestTime * 3);
+        setText("Pending Locked");
+      } else {
+        setTimeLeft(0);
+      }
+      if (web3 && window.ts) {
+        setValue(window.ts.value);
+      }
+    } catch (error) {
+      console.log(error);
     }
   }, []);
   useEffect(() => {
