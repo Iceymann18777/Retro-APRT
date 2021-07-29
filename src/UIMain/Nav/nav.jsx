@@ -175,12 +175,13 @@ export default function Nav() {
       } catch (error) {}
       //}
     }
-    async function update() {
-      await getQbertStats();
-    }
+
+    getQbertStats();
+    //async function update() {await getQbertStats();}
     const interval = setInterval(() => {
       // do something
-      update();
+      //update();
+      getQbertStats();
     }, 3000);
 
     return () => {

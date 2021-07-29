@@ -34,13 +34,12 @@ export default function Tvl() {
         setValue(window.ts.value);
       }
     }
-
-    async function update() {
-      await getTVLGlobal();
-    }
+    getTVLGlobal();
+    //async function update() { await getTVLGlobal();}
     const interval = setInterval(() => {
       // do something
-      update();
+      //update();
+      getTVLGlobal();
     }, 3000);
 
     return () => {
