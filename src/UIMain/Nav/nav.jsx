@@ -181,13 +181,11 @@ export default function Nav() {
   useEffect(() => {
     //async function updateNav() {await getQbertStats();}
     getQbertStats();
-
     const interval = setInterval(() => {
       // do something
       //updateNav();
       getQbertStats();
     }, 6000);
-
     return () => {
       clearInterval(interval);
     };
