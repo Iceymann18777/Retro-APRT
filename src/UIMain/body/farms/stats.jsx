@@ -25,7 +25,7 @@ export default function Stats() {
 
   useEffect(() => {
     getUserStats();
-    const interval = setInterval(async () => {
+    const interval = setInterval(() => {
       getUserStats();
     }, 3000);
     return () => {
