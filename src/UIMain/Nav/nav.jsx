@@ -125,7 +125,8 @@ export default function Nav() {
     window.ethereum = new Web3(provider);
     const accounts = await web3.eth.getAccounts();
     window.account = accounts[0];
-    getQbertStats();
+    await getQbertStats();
+    console.log({ injectedChainId });
   }
 
   const getQbertStats = useCallback(async () => {
