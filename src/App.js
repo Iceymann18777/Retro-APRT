@@ -13,23 +13,16 @@ import Footer from "./UIMain/Footer";
 //import Util from "./utils/aprLib/index.js";
 //import nativeFarmAbi from "./utils/nativeFarmAbi.js";
 
-import {
-  getPCSPrice,
-  getDEXGuruPrice,
-  getGeckoPrice,
-  tryFetchPrice,
-  getDebankPrice,
-  getCovalentPrice,
-  tryFetchLPPrice
-} from "./utils/getPrices";
-//import getTokenPrice from "./utils/getTvl";
-var qbertprice = 100;
+//import { tryFetchLPPrice} from "./utils/getPrices";
+//var qbertprice = 100;
 
-const testprice = async () => {
+{
+  /*const testprice = async () => {
   var qpertaddress = "0x075da65514bc2af2508314f8a3150ca660e6eea1";
   qbertprice = await tryFetchLPPrice(qpertaddress);
   console.log({ qbertprice });
-};
+};*/
+}
 
 export default function App() {
   return (
@@ -41,11 +34,13 @@ export default function App() {
         <Footer />
         {/*<button onClick={() => startup()}>Check Out</button>*/}
       </main>
-      <ul>
-        <li>
-          {qbertprice} <button onClick={() => testprice()}>try test lol</button>
-        </li>
-      </ul>
+      {/* <ul>
+          <li>
+            {qbertprice}{" "}
+            <button onClick={() => testprice()}>try test lol</button>
+          </li>
+        </ul>
+*/}
     </div>
   );
 }
