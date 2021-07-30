@@ -8,7 +8,7 @@ import { getWeb3NoAccount } from "../../../../utils/web3Global";
 import { infoPry } from "../../../assets/svg";
 import $ from "jquery";
 import getBalance from "../../../../utils/tokenUtils";
-import { constants, utils } from "ethers";
+import { constants } from "ethers";
 import { formatNumberSuffix } from "../../../../utils/formatBalance";
 import {
   tokenAbi,
@@ -177,7 +177,7 @@ export default function Pool(props) {
         useGrouping: false
       });
       let pool = new web3.eth.Contract(poolAbi, farmAddress);
-      let amount = new Web3.utils.toBN(depod).toString();
+      let amount = new web3.utils.toBN(depod).toString();
       await pool.methods
         .deposit(props.id, amount)
         .send({ from: window.account });
@@ -197,7 +197,7 @@ export default function Pool(props) {
       let withs = withdrawState.toLocaleString("fullwide", {
         useGrouping: false
       });
-      let amount = new Web3.utils.toBN(withs).toString();
+      let amount = new web3.utils.toBN(withs).toString();
       await pool.methods
         .withdraw(props.id, amount)
         .send({ from: window.account });
