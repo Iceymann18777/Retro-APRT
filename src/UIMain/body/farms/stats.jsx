@@ -9,15 +9,17 @@ export default function Stats() {
 
   const getUserStats = useCallback(async () => {
     try {
-      if (web3.eth) {
-        await loadPending();
-        if (window.ts) {
+      //if (web3.eth) {
+      //await loadPending();
+      if (window.account) {
+        if (window.ts.deposited && window.ts.pending !== 0) {
           setData({
             pending: window.ts.pending,
             deposited: window.ts.deposited
           });
         }
       }
+      //}
     } catch (error) {
       console.log(error);
     }
@@ -27,13 +29,14 @@ export default function Stats() {
     getUserStats();
     const interval = setInterval(() => {
       getUserStats();
-    }, 3000);
+    });
     return () => {
       clearInterval(interval);
     };
   }, [getUserStats]);
 
-  async function loadPending(params) {
+  {
+    /*async function loadPending(params) {
     let pool = new web3.eth.Contract(poolAbi, farmAddress);
     let num = 0;
     for (let i = 0; i < config.length; i++) {
@@ -46,6 +49,7 @@ export default function Stats() {
       } catch (error) {}
     }
     window.ts.pending = num / 10 ** 18;
+  }*/
   }
 
   async function harvestall() {

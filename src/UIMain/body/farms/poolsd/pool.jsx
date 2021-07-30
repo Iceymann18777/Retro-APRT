@@ -3,7 +3,7 @@ import Web3 from "web3";
 import { tryFetchPrice, tryFetchLPPrice } from "../../../../utils/getPrices";
 import { calculateApr } from "../../../../utils/apr";
 import { getWeb3NoAccount } from "../../../../utils/web3Global";
-//import util from "../../../../utils/aprLib/index";
+import util from "../../../../utils/aprLib/index";
 //import BigNumber from "bignumber.js";
 import { infoPry } from "../../../assets/svg";
 import $ from "jquery";
@@ -42,7 +42,7 @@ export default function Pool(props) {
     window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
     try {
       //if (window.qbertprice) {
-      var deposited = 0;
+      var deposited;
       var allowance = 0;
       var pending = 0;
       var price;
@@ -76,13 +76,6 @@ export default function Pool(props) {
       }
       //let total = (balance / 10 ** props.decimals) * price;
       apr = await calculateApr(pool, balance, price, props.id, props.decimals);
-      if (!window.ts.added.includes(props.token_address)) {
-        window.ts.value =
-          window.ts.value + (balance / 10 ** props.decimals) * price;
-        window.ts.deposited =
-          window.ts.deposited + (deposited / 10 ** props.decimals) * price;
-        window.ts.added.push(props.token_address);
-      }
 
       if (window.account) {
         balanced = await getBalance(props.token_address, window.account);
@@ -99,6 +92,14 @@ export default function Pool(props) {
         pending = await pool.methods
           .pendingNATIVE(props.id, window.account)
           .call();
+      }
+      if (!window.ts.added.includes(props.token_address)) {
+        window.ts.value =
+          window.ts.value + (balance / 10 ** props.decimals) * price;
+        window.ts.deposited =
+          window.ts.deposited + (deposited / 10 ** props.decimals) * price;
+        window.ts.pending = window.ts.pending + pending / 10 ** 18;
+        window.ts.added.push(props.token_address);
       }
       setPoolInfo({
         pool,
@@ -120,11 +121,44 @@ export default function Pool(props) {
   async function tokenPrice() {
     var tokenPrice = 0;
     if (!props.isLp) {
-      tokenPrice = await tryFetchPrice(props.token_address);
-      return tokenPrice;
+      try {
+        tokenPrice = await tryFetchPrice(props.token_address);
+        return tokenPrice;
+      } catch (error) {
+        console.log("Try Failed APIS");
+      }
+      try {
+        tokenPrice = await util.getTokenPrice(
+          props.price.lpaddress,
+          props.decimals
+        );
+        tokenPrice = tokenPrice[props.price.reserve];
+        return tokenPrice;
+      } catch (error) {
+        console.log("Try query RPC");
+      }
     } else {
-      tokenPrice = await tryFetchLPPrice(props.token_address);
-      return tokenPrice;
+      try {
+        tokenPrice = await tryFetchLPPrice(props.token_address);
+        return tokenPrice;
+      } catch (error) {
+        console.log("Try Failed APIS LP");
+      }
+      try {
+        let value = await util.getLpPrice(
+          props.price.lpaddress,
+          props.tokenDecimals
+        );
+        value = value[props.price.reserve] * 2;
+        tokenPrice = await util.getTokenPrice(
+          props.price.bnnlpaddress,
+          props.tokenDecimals
+        );
+        tokenPrice = tokenPrice[props.price.reserve];
+        return value * tokenPrice;
+      } catch (error) {
+        console.log("Try query RPC");
+      }
     }
   }
 
