@@ -120,7 +120,7 @@ export default function Nav() {
       };
 
       web3Modal = new Web3Modal({
-        network: 56, // optional or "binance"
+        network: "binance", // optional or "binance"
         cacheProvider: false, // optional
         providerOptions, // required
         disableInjectedProvider: false,
