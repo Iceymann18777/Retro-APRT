@@ -381,11 +381,25 @@ export default function Nav() {
               ? shortenAddress(account)
               : "Unlock Wallet"}
           </a>
-          <div className="balance ml-10">
+          <div
+            className="balance ml-10"
+            style={{
+              color: "#fff",
+              backgroundColor: "#8247e5"
+              //color: '#000',
+              //backgroundColor: '#f3ba2f'
+            }}
+          >
             <span className="qbert-balance">
               {formatNumberHumanize(data.balance, 1)} QBERT
             </span>
-            <div className="wallet-info">
+            <div
+              className="wallet-info"
+              style={{
+                backgroundColor: "rgb(0 0 0 / 80%)",
+                boxShadow: "0 0 20px 5px #18da8d"
+              }}
+            >
               <span
                 className="wallet-address"
                 style={{
@@ -437,11 +451,25 @@ export default function Nav() {
               ? shortenAddress(account)
               : "Unlock Wallet"}
           </a>
-          <div className="balance ml-10">
+          <div
+            className="balance ml-10"
+            style={{
+              color: "#fff",
+              backgroundColor: "#8247e5"
+              //color: '#000',
+              //backgroundColor: '#f3ba2f'
+            }}
+          >
             <span className="qbert-balance">
               {formatNumberHumanize(data.balance, 1)} QBERT
             </span>
-            <div className="wallet-info">
+            <div
+              className="wallet-info"
+              style={{
+                backgroundColor: "rgb(0 0 0 / 80%)",
+                boxShadow: "0 0 20px 5px #18da8d"
+              }}
+            >
               <span
                 className="wallet-address"
                 style={{
