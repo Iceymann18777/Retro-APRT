@@ -35,14 +35,14 @@ export default function Pool(props) {
   });
 
   const loadPool = useCallback(async () => {
+    window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
     web3ext = getWeb3NoAccount();
     let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
     let pool = new web3ext.eth.Contract(poolAbi, farmAddress);
     let strategy = new web3ext.eth.Contract(strategyAbi, props.poolAddress);
-    window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
     try {
       //if (window.qbertprice) {
-      var deposited;
+      var deposited = 0;
       var allowance = 0;
       var pending = 0;
       var price;

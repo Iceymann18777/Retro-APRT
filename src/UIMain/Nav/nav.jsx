@@ -3,7 +3,13 @@ import Popup from "reactjs-popup";
 import Web3 from "web3";
 import { tryFetchPrice } from "../../utils/getPrices";
 import { getWeb3NoAccount } from "../../utils/web3Global";
-import { mathwlt, twtwlt, sfplwlt, bnbwlt } from "../../UIMain/assets/wallets";
+import {
+  mathwlt,
+  twtwlt,
+  sfplwlt,
+  bnbwlt,
+  mtmskwlt
+} from "../../UIMain/assets/wallets";
 import { logo, qbertpxl, qbertdice } from "../assets/logos";
 import { popupclose, popupcopy } from "../assets/svg";
 //mport utils from "../../utils/aprLib/index";
@@ -16,6 +22,12 @@ import { connectors } from "web3modal";
 //import getWeb3 from "../../utils/web3Utils";
 //import Util from "./utils/aprLib/index.js";
 //import nativeFarmAbi from "./utils/nativeFarmAbi.js";
+let web3 = null;
+let web3Modal = null;
+let modalProvider = null;
+let provider = null;
+let injectedChainId = null;
+let accounts = null;
 
 const wbnbAddress = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
 const qbertAddress = "0x6ED390Befbb50f4b492f08Ea0965735906034F81";
@@ -44,89 +56,111 @@ export default function Nav() {
   };
 
   async function startup() {
-    console.log("starting up");
-    const providerOptions = {
-      /* See Provider Options Section */
-      injected: {
-        display: {
-          name: "Metamask",
-          description: "Metamask"
-        }
-      },
-      walletconnect: {
-        package: WalletConnectProvider,
-        options: {
-          rpc: {
-            1: "https://bsc-dataseed.binance.org/",
-            56: "https://bsc-dataseed.binance.org/"
+    if (!window.account) {
+      console.log("starting up");
+      const providerOptions = {
+        /* See Provider Options Section */
+        injected: {
+          display: {
+            name: "Metamask",
+            description: "Metamask",
+            logo: mtmskwlt
           }
+        },
+        walletconnect: {
+          package: WalletConnectProvider,
+          options: {
+            rpc: {
+              1: "https://bsc-dataseed.binance.org/",
+              56: "https://bsc-dataseed.binance.org/"
+            }
+          }
+        },
+        "custom-binance": {
+          display: {
+            name: "Binance",
+            description: "Binance Chain Wallet",
+            logo: bnbwlt
+          },
+          package: "binance",
+          connector: async (ProviderPackage, options) => {
+            let provider = window.BinanceChain;
+            provider.autoRefreshOnNetworkChange = true;
+            await provider.enable();
+            return provider;
+          }
+        },
+        "custom-math": {
+          display: {
+            name: "Math",
+            description: "Math Wallet",
+            logo: mathwlt
+          },
+          package: "math",
+          connector: connectors.injected
+        },
+        "custom-twt": {
+          display: {
+            name: "Trust",
+            description: "Trust Wallet",
+            logo: twtwlt
+          },
+          package: "twt",
+          connector: connectors.injected
+        },
+        "custom-safepal": {
+          display: {
+            name: "SafePal",
+            description: "SafePal App",
+            logo: sfplwlt
+          },
+          package: "safepal",
+          connector: connectors.injected
         }
-      },
-      "custom-binance": {
-        display: {
-          name: "Binance",
-          description: "Binance Chain Wallet",
-          logo: bnbwlt
-        },
-        package: "binance",
-        connector: async (ProviderPackage, options) => {
-          const provider = window.BinanceChain;
-          await provider.enable();
-          return provider;
+      };
+
+      web3Modal = new Web3Modal({
+        network: 56, // optional or "binance"
+        cacheProvider: false, // optional
+        providerOptions, // required
+        theme: {
+          background: "#380033a8",
+          main: "#fff",
+          secondary: "#00c0d4",
+          border: "#380033a8",
+          hover: "#ff0a9c78"
         }
-      },
-      "custom-math": {
-        display: {
-          name: "Math",
-          description: "Math Wallet",
-          logo: mathwlt
-        },
-        package: "math",
-        connector: connectors.injected
-      },
-      "custom-twt": {
-        display: {
-          name: "Trust",
-          description: "Trust Wallet",
-          logo: twtwlt
-        },
-        package: "twt",
-        connector: connectors.injected
-      },
-      "custom-safepal": {
-        display: {
-          name: "SafePal",
-          description: "SafePal App",
-          logo: sfplwlt
-        },
-        package: "safepal",
-        connector: connectors.injected
-      }
-    };
+        //providerOptions // required
+      });
 
-    const web3Modal = new Web3Modal({
-      network: "binance", // optional
-      cacheProvider: false, // optional
-      theme: {
-        background: "#380033a8",
-        main: "#fff",
-        secondary: "#00c0d4",
-        border: "#380033a8",
-        hover: "#ff0a9c78"
-      },
-      providerOptions // required
-    });
+      modalProvider = await web3Modal.connect();
+      provider = new Web3(modalProvider);
+      web3 = new Web3(provider);
+      injectedChainId = await web3.eth.getChainId();
+      //getWeb3(provider);
+      //window.web3 = new Web3(provider);
+      //window.ethereum = new Web3(provider);
+      accounts = await web3.eth.getAccounts();
+      window.account = accounts[0];
+      console.log({ injectedChainId });
+      await getQbertStats();
+    } else {
+      console.log("Disconnect");
+      await onDisconnect();
+      await getQbertStats();
+    }
+  }
 
-    const provider = await web3Modal.connect();
-    const web3 = new Web3(provider);
-    const injectedChainId = await web3.eth.getChainId();
-    //getWeb3(provider);
-    window.web3 = new Web3(provider);
-    window.ethereum = new Web3(provider);
-    const accounts = await web3.eth.getAccounts();
-    window.account = accounts[0];
-    await getQbertStats();
-    console.log({ injectedChainId });
+  async function onDisconnect() {
+    web3 = "";
+    provider = "";
+    accounts = "";
+    window.account = "";
+    //window.web3 = "";
+    //window.ethereum = "";
+    setAccount("");
+    //onDisconnect();
+    await web3Modal.clearCachedProvider();
   }
 
   const getQbertStats = useCallback(async () => {

@@ -5,19 +5,22 @@ import { formatNumberHumanize } from "../../../utils/formatBalance";
 //import Web3 from "web3";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 export default function Stats() {
-  let [data, setData] = useState({ pending: 0, deposit: 0 });
+  var [data, setData] = useState({ pending: 0, deposit: 0 });
 
   const getUserStats = useCallback(async () => {
     try {
       //if (web3.eth) {
       //await loadPending();
       if (window.account) {
-        if (window.ts.deposited && window.ts.pending !== 0) {
-          setData({
-            pending: window.ts.pending,
-            deposited: window.ts.deposited
-          });
-        }
+        setData({
+          pending: window.ts.pending,
+          deposited: window.ts.deposited
+        });
+      } else {
+        setData({
+          pending: 0,
+          deposited: 0
+        });
       }
       //}
     } catch (error) {
@@ -29,7 +32,7 @@ export default function Stats() {
     getUserStats();
     const interval = setInterval(() => {
       getUserStats();
-    });
+    }, 1000);
     return () => {
       clearInterval(interval);
     };
