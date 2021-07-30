@@ -4946,3 +4946,41 @@ div.create-lp-content .btn.create {
 .app .content .pools .pool-card.holostar.active:before,.holostar.active:after {
     animation: none
 }
+
+.app .network-options-bar {
+  display: flex;
+  flex-direction: row;
+  margin: 43px 0 34px
+}
+
+.app .network-options-bar .network-selector {
+  position: relative;
+  width: 92px;
+  height: 50px;
+  background-color: var(--c-background-4);
+  border-radius: 25px;
+  margin-right: 20px;
+  cursor: pointer
+}
+
+.network-options-bar .network-selector::before {
+  content: '';
+  position: absolute;
+  display: block;
+  width: 42px;
+  height: 42px;
+  border-radius: 50%;
+  top: 4px;
+  left: 4px;
+  transition: transform .3s ease
+}
+
+.network-options-bar .network-selector.index-0::before {
+  transform: translateX(0);
+  background-image: url(../images/network-bsc-icon.svg)
+}
+
+.network-options-bar .network-selector.index-1::before {
+  transform: translateX(40px);
+  background-image: url(../images/network-polygon-icon.svg)
+}

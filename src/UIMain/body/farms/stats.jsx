@@ -1,5 +1,6 @@
 import { useState, useEffect, useCallback } from "react";
 import { poolAbi } from "../../../Resources/lib/abi";
+import $ from "jquery";
 import config from "../../../pools_config.json";
 import { formatNumberHumanize } from "../../../utils/formatBalance";
 //import Web3 from "web3";
@@ -71,8 +72,38 @@ export default function Stats() {
     }
     console.log("finished");
   }
+
+  async function changenetwork() {
+    var networkOptions = $(".network-options-bar .network-selector");
+    if (networkOptions.data("transitioning")) {
+      return;
+    }
+    let url = "";
+    networkOptions.data("transitioning", true);
+    if (networkOptions.hasClass("index-0")) {
+      networkOptions.removeClass("index-0");
+      networkOptions.addClass("index-1");
+      url = networkOptions.data("index-1-url");
+    } else if (networkOptions.hasClass("index-1")) {
+      networkOptions.removeClass("index-1");
+      networkOptions.addClass("index-0");
+      url = networkOptions.data("index-0-url");
+    }
+    setTimeout(() => {
+      window.location.replace(url);
+    }, 300);
+  }
+
   return (
     <div className="stats-stripe">
+      <div class="network-options-bar">
+        <div
+          class="network-selector index-0"
+          data-index-0-url="/" //bsc
+          data-index-1-url="/" //polygon
+          onClick={() => changenetwork()}
+        ></div>
+      </div>
       <div className="txt deposit-ttl">My total deposit:</div>
       <div className={"txt total-deposit loading"}>
         {data.deposited
