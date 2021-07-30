@@ -34,9 +34,6 @@ export default function Nav() {
     marketCap: 0
   });
 
-  const web3ext = getWeb3NoAccount();
-  let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
-
   const toggleMenu = () => {
     if (!menu) {
       setMenu(true);
@@ -131,6 +128,8 @@ export default function Nav() {
   }
 
   const getQbertStats = useCallback(async () => {
+    const web3ext = getWeb3NoAccount();
+    let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
     // hacer algo
     //if (!data.loaded) {
     try {

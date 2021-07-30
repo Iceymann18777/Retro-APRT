@@ -17,7 +17,7 @@ import {
   strategyAbi
 } from "../../../../Resources/lib/abi";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
-
+var web3ext;
 export default function Pool(props) {
   //var [loaded, setLoaded] = useState(false);
   var [balance, setBalance] = useState(0);
@@ -33,12 +33,12 @@ export default function Pool(props) {
     apr: 0,
     locked: true
   });
-  const web3ext = getWeb3NoAccount();
-  let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
-  let pool = new web3ext.eth.Contract(poolAbi, farmAddress);
-  let strategy = new web3ext.eth.Contract(strategyAbi, props.poolAddress);
 
   const loadPool = useCallback(async () => {
+    web3ext = getWeb3NoAccount();
+    let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
+    let pool = new web3ext.eth.Contract(poolAbi, farmAddress);
+    let strategy = new web3ext.eth.Contract(strategyAbi, props.poolAddress);
     window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
     try {
       //if (window.qbertprice) {
