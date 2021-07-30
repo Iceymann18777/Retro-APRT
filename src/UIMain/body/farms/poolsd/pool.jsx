@@ -33,33 +33,26 @@ export default function Pool(props) {
     apr: 0,
     locked: true
   });
-  {
-    /*const loadall = useCallback(async () => {
-    if (window.qbertprice) {
-      //if (window.ethereum) {
-        try {
-          window.ts.times = 1;
-          await loadPool();
-        } catch (error) {}
-      //}
-    }
-  }, []);*/
-  }
+
   const loadPool = useCallback(async () => {
-    const web3ext = await getWeb3NoAccount();
+    const web3ext = getWeb3NoAccount();
     let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
     let pool = new web3ext.eth.Contract(poolAbi, farmAddress);
     let strategy = new web3ext.eth.Contract(strategyAbi, props.poolAddress);
     try {
       if (window.qbertprice) {
-        var deposited;
+        var deposited = 0;
+        var allowance = 0;
+        var pending = 0;
         var price;
+        var locked;
+        var balance;
+        var apr;
+        var balanced = 0;
+        setBalance(balanced);
         if (!poolInfo.price) {
           price = await tokenPrice();
         }
-        //let qbertPrice = await util.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
-        //let qbertPrice = window.qbertprice;
-        var locked;
         if (
           props.token_address == "0xa6e53f07bD410df069e20Ced725bdC9135146Fe9"
         ) {
@@ -72,7 +65,6 @@ export default function Pool(props) {
             locked = false;
           }
         }
-        var balance = 0;
         if (!props.isLp || props.isLpCompund) {
           balance = await strategy.methods.wantLockedTotal().call();
         } else {
@@ -82,13 +74,14 @@ export default function Pool(props) {
           //console.log(price);
         }
         //let total = (balance / 10 ** props.decimals) * price;
-        let apr = await calculateApr(
+        apr = await calculateApr(
           pool,
           balance,
           price,
           props.id,
           props.decimals
         );
+
         if (!window.ts.added.includes(props.token_address)) {
           window.ts.value =
             window.ts.value + (balance / 10 ** props.decimals) * price;
@@ -96,56 +89,34 @@ export default function Pool(props) {
             window.ts.deposited + (deposited / 10 ** props.decimals) * price;
           window.ts.added.push(props.token_address);
         }
+
         if (window.account) {
-          let balanced = await getBalance(props.token_address, window.account);
+          balanced = await getBalance(props.token_address, window.account);
           setBalance(balanced);
           //var QBERT_PERBLOCK = await pool.methods.NATIVEPerBlock().call();
           deposited = await pool.methods
             .stakedWantTokens(props.id, window.account)
             .call();
-          let allowance = await token.methods
+          allowance = await token.methods
             .allowance(window.account, farmAddress)
             .call();
           //let pendingBefore = poolInfo.pending;
           //console.log(pending);
-          let pending = await pool.methods
+          pending = await pool.methods
             .pendingNATIVE(props.id, window.account)
             .call();
-
-          setPoolInfo({
-            pool,
-            deposited,
-            allowance,
-            pending,
-            price,
-            balance,
-            apr,
-            userBalance: balanced,
-            locked
-          });
-        } else {
-          let balanced = 0;
-          setBalance(balanced);
-
-          //var QBERT_PERBLOCK = await pool.methods.NATIVEPerBlock().call();
-          let deposited = 0;
-          let allowance = 0;
-          //let pendingBefore = poolInfo.pending;
-          //console.log(pending);
-          let pending = 0;
-
-          setPoolInfo({
-            pool,
-            deposited,
-            allowance,
-            pending,
-            price,
-            balance,
-            apr,
-            userBalance: balanced,
-            locked
-          });
         }
+        setPoolInfo({
+          pool,
+          deposited,
+          allowance,
+          pending,
+          price,
+          balance,
+          apr,
+          userBalance: balanced,
+          locked
+        });
       }
     } catch (error) {
       console.log(error);
@@ -153,13 +124,12 @@ export default function Pool(props) {
   }, []);
 
   async function tokenPrice() {
-    let tokenPrice = 0;
+    var tokenPrice = 0;
     if (!props.isLp) {
       tokenPrice = await tryFetchPrice(props.token_address);
       return tokenPrice;
     } else {
       tokenPrice = await tryFetchLPPrice(props.token_address);
-      console.log({ tokenPrice });
       return tokenPrice;
     }
   }
@@ -197,9 +167,7 @@ export default function Pool(props) {
     await token.methods
       .approve(farmAddress, constants.MaxUint256)
       .send({ from: window.account });
-    let allowance = await token.methods
-      .allowance(window.account, farmAddress)
-      .call();
+    await token.methods.allowance(window.account, farmAddress).call();
   }
   async function deposit() {
     if (balance >= depositState) {
