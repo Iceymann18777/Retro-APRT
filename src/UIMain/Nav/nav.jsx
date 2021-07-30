@@ -123,6 +123,7 @@ export default function Nav() {
         network: 56, // optional or "binance"
         cacheProvider: false, // optional
         providerOptions, // required
+        disableInjectedProvider: false,
         theme: {
           background: "#380033a8",
           main: "#fff",
