@@ -31,7 +31,7 @@ const testprice = async () => {
   console.log({ qbertprice });
 };
 
-export default function App({ children }) {
+export default function App() {
   return (
     <div className="App">
       <main className="app preload">

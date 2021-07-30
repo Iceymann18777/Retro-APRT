@@ -34,6 +34,9 @@ export default function Nav() {
     marketCap: 0
   });
 
+  const web3ext = getWeb3NoAccount();
+  let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
+
   const toggleMenu = () => {
     if (!menu) {
       setMenu(true);
@@ -128,11 +131,9 @@ export default function Nav() {
   }
 
   const getQbertStats = useCallback(async () => {
-    const web3ext = await getWeb3NoAccount();
     // hacer algo
     //if (!data.loaded) {
     try {
-      let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
       if (window.account) {
         setAccount(window.account);
         let balance = await qbert.methods.balanceOf(window.account).call();
@@ -180,14 +181,14 @@ export default function Nav() {
   }, []);
 
   useEffect(() => {
-    window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
+    //window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
     //async function updateNav() {await getQbertStats();}
     getQbertStats();
     const interval = setInterval(() => {
       // do something
       //updateNav();
       getQbertStats();
-    }, 10000);
+    }, 60000);
     return () => {
       clearInterval(interval);
     };

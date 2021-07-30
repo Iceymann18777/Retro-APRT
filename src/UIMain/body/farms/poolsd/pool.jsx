@@ -3,7 +3,7 @@ import Web3 from "web3";
 import { tryFetchPrice, tryFetchLPPrice } from "../../../../utils/getPrices";
 import { calculateApr } from "../../../../utils/apr";
 import { getWeb3NoAccount } from "../../../../utils/web3Global";
-import util from "../../../../utils/aprLib/index";
+//import util from "../../../../utils/aprLib/index";
 //import BigNumber from "bignumber.js";
 import { infoPry } from "../../../assets/svg";
 import $ from "jquery";
@@ -33,12 +33,13 @@ export default function Pool(props) {
     apr: 0,
     locked: true
   });
+  const web3ext = getWeb3NoAccount();
+  let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
+  let pool = new web3ext.eth.Contract(poolAbi, farmAddress);
+  let strategy = new web3ext.eth.Contract(strategyAbi, props.poolAddress);
 
   const loadPool = useCallback(async () => {
-    const web3ext = getWeb3NoAccount();
-    let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
-    let pool = new web3ext.eth.Contract(poolAbi, farmAddress);
-    let strategy = new web3ext.eth.Contract(strategyAbi, props.poolAddress);
+    window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
     try {
       if (window.qbertprice) {
         var deposited = 0;
@@ -54,7 +55,7 @@ export default function Pool(props) {
           price = await tokenPrice();
         }
         if (
-          props.token_address == "0xa6e53f07bD410df069e20Ced725bdC9135146Fe9"
+          props.token_address === "0xa6e53f07bD410df069e20Ced725bdC9135146Fe9"
         ) {
           let rcube = new web3ext.eth.Contract(rcubeAbi, props.token_address);
           let burnAmount = await rcube.methods._getBurnLevy.call().call();
@@ -70,7 +71,9 @@ export default function Pool(props) {
         } else {
           balance = await token.methods.balanceOf(props.poolAddress).call();
         }
-        if (props.poolAddress == "0xB9468Ee4bEf2979615855aB1Eb6718505b1BB756") {
+        if (
+          props.poolAddress === "0xB9468Ee4bEf2979615855aB1Eb6718505b1BB756"
+        ) {
           //console.log(price);
         }
         //let total = (balance / 10 ** props.decimals) * price;
@@ -81,7 +84,6 @@ export default function Pool(props) {
           props.id,
           props.decimals
         );
-
         if (!window.ts.added.includes(props.token_address)) {
           window.ts.value =
             window.ts.value + (balance / 10 ** props.decimals) * price;
@@ -135,11 +137,11 @@ export default function Pool(props) {
   }
 
   const maxButton = async (param) => {
-    if (param == "deposit") {
+    if (param === "deposit") {
       setDepositState(balance);
       let elem = document.getElementsByClassName("depositInput" + props.id);
       elem[0].value = balance / 10 ** props.decimals;
-    } else if (param == "withdraw") {
+    } else if (param === "withdraw") {
       setWithdrawState(poolInfo.deposited);
       let elem = document.getElementsByClassName("withdrawInput" + props.id);
       elem[0].value = poolInfo.deposited / 10 ** props.decimals;
@@ -147,7 +149,7 @@ export default function Pool(props) {
   };
   const handdleInput = async (param, event) => {
     event.preventDefault();
-    if (param == "withdraw" && event.target.value) {
+    if (param === "withdraw" && event.target.value) {
       if (event.target.value) {
         setWithdrawState(parseFloat(event.target.value) * 10 ** props.decimals);
       } else {
@@ -225,7 +227,7 @@ export default function Pool(props) {
     const interval = setInterval(() => {
       //loadall();
       loadPool();
-    }, 10000);
+    }, 9000);
     return () => {
       clearInterval(interval);
     };
