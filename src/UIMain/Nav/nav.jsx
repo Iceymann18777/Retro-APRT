@@ -21,6 +21,7 @@ const wbnbAddress = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
 const qbertAddress = "0x6ED390Befbb50f4b492f08Ea0965735906034F81";
 const zeroAdress = "0x0000000000000000000000000000000000000000";
 const burnAddress = "0x000000000000000000000000000000000000dEaD";
+var web3ext;
 
 export default function Nav() {
   var [menu, setMenu] = useState(false);
@@ -128,7 +129,7 @@ export default function Nav() {
   }
 
   const getQbertStats = useCallback(async () => {
-    const web3ext = getWeb3NoAccount();
+    web3ext = getWeb3NoAccount();
     let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
     // hacer algo
     //if (!data.loaded) {
