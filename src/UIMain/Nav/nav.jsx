@@ -17,6 +17,7 @@ import { formatNumberHumanize } from "../../utils/formatBalance";
 import { tokenAbi } from "../../Resources/lib/abi";
 import Web3Modal, { connectors } from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
+import { shortenAddress } from "../../utils/stylish";
 //import logo from "./UIMain/assets/logos/QBERTSWAG.png";
 //import getWeb3 from "../../utils/web3Utils";
 //import Util from "./utils/aprLib/index.js";
@@ -72,7 +73,8 @@ export default function Nav() {
             rpc: {
               1: "https://bsc-dataseed.binance.org/",
               56: "https://bsc-dataseed.binance.org/"
-            }
+            },
+            pollingInterval: 3000
           }
         },
         "custom-binance": {
@@ -375,7 +377,9 @@ export default function Nav() {
             className="btn small ml-10 "
             id="btn-wallet-unlock"
           >
-            {account ? account : "Unlock Wallet"}
+            {shortenAddress(account)
+              ? shortenAddress(account)
+              : "Unlock Wallet"}
           </a>
           <div className="balance ml-10">
             <span className="qbert-balance">
@@ -392,7 +396,9 @@ export default function Nav() {
                 }}
                 onClick={() => startup()}
               >
-                {account ? account : "Unlock Wallet"}
+                {shortenAddress(account)
+                  ? shortenAddress(account)
+                  : "Unlock Wallet"}
               </span>
               <span className="icon ml-10"></span>
             </div>
@@ -427,7 +433,9 @@ export default function Nav() {
             id="btn-wallet-unlock"
             style={{ display: "none" }}
           >
-            {account ? account : "Unlock Wallet"}
+            {shortenAddress(account)
+              ? shortenAddress(account)
+              : "Unlock Wallet"}
           </a>
           <div className="balance ml-10">
             <span className="qbert-balance">
@@ -444,7 +452,9 @@ export default function Nav() {
                 }}
                 onClick={() => startup()}
               >
-                {account ? account : "Unlock Wallet"}
+                {shortenAddress(account)
+                  ? shortenAddress(account)
+                  : "Unlock Wallet"}
               </span>
               <span className="icon ml-10"></span>
             </div>
