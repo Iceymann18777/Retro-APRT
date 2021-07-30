@@ -396,7 +396,7 @@ export default function Nav() {
             <div
               className="wallet-info"
               style={{
-                backgroundColor: "rgb(0 0 0 / 80%)",
+                backgroundColor: "#000",
                 boxShadow: "0 0 20px 5px #18da8d"
               }}
             >
@@ -466,7 +466,7 @@ export default function Nav() {
             <div
               className="wallet-info"
               style={{
-                backgroundColor: "rgb(0 0 0 / 80%)",
+                backgroundColor: "#000",
                 boxShadow: "0 0 20px 5px #18da8d"
               }}
             >
