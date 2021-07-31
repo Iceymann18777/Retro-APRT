@@ -22,12 +22,12 @@ import { shortenAddress } from "../../utils/stylish";
 //import getWeb3 from "../../utils/web3Utils";
 //import Util from "./utils/aprLib/index.js";
 //import nativeFarmAbi from "./utils/nativeFarmAbi.js";
-let web3 = null;
-let web3Modal = null;
-let modalProvider = null;
-let provider = null;
-let injectedChainId = null;
-let accounts = null;
+let web3 = "";
+let web3Modal = "";
+let modalProvider = "";
+let provider = "";
+let injectedChainId = "";
+let accounts = "";
 
 const wbnbAddress = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
 const qbertAddress = "0x6ED390Befbb50f4b492f08Ea0965735906034F81";
@@ -144,12 +144,14 @@ export default function Nav() {
       //window.ethereum = new Web3(provider);
       accounts = await web3.eth.getAccounts();
       window.account = accounts[0];
+      setAccount(window.account);
       console.log({ injectedChainId });
-      await getQbertStats();
+      //await getQbertStats();
     } else {
       console.log("Disconnect");
       await onDisconnect();
-      await getQbertStats();
+      setAccount(window.account);
+      //await getQbertStats();
     }
   }
 
@@ -172,7 +174,7 @@ export default function Nav() {
     //if (!data.loaded) {
     try {
       if (window.account) {
-        setAccount(window.account);
+        //setAccount(window.account);
         let balance = await qbert.methods.balanceOf(window.account).call();
         let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
         let totalSupply = await qbert.methods.totalSupply().call();
@@ -221,6 +223,7 @@ export default function Nav() {
     //window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
     //async function updateNav() {await getQbertStats();}
     getQbertStats();
+    //setAccount(window.account);
     const interval = setInterval(() => {
       // do something
       //updateNav();
@@ -229,7 +232,7 @@ export default function Nav() {
     return () => {
       clearInterval(interval);
     };
-  }, [getQbertStats]);
+  }, [account]);
 
   return (
     <header>
