@@ -1,5 +1,5 @@
 import random from "lodash/random";
-require("dotenv").config();
+//require("dotenv").config();
 
 // Array of available nodes to connect to
 export const nodes = [
