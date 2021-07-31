@@ -50,30 +50,29 @@ export default function Pool(props) {
     var balance;
     var apr;
     var balanced = 0;
+    var burnAmount;
     setBalance(balanced);
-    if (!poolInfo.price) {
-      price = await tokenPrice();
-    }
+    //if (!poolInfo.price) {
+    price = await tokenPrice();
+    //}
     if (props.token_address === "0xa6e53f07bD410df069e20Ced725bdC9135146Fe9") {
-      let burnAmount = await rcube.methods._getBurnLevy.call().call();
-      console.log(burnAmount);
-      if (burnAmount > 1) {
-        locked = true;
-      } else {
-        locked = false;
-      }
+      burnAmount = await rcube.methods._getBurnLevy.call().call();
     }
-    if (!props.isLp || props.isLpCompund) {
-      balance = await strategy.methods.wantLockedTotal().call();
-    } else {
-      balance = await token.methods.balanceOf(props.poolAddress).call();
-    }
+
+    balance = await strategy.methods.wantLockedTotal().call();
+
     if (props.poolAddress === "0xB9468Ee4bEf2979615855aB1Eb6718505b1BB756") {
       //console.log(price);
     }
     //let total = (balance / 10 ** props.decimals) * price;
     apr = await calculateApr(pool, balance, price, props.id, props.decimals);
 
+    //console.log(burnAmount);
+    if (burnAmount > 1) {
+      locked = true;
+    } else {
+      locked = false;
+    }
     if (window.account) {
       balanced = await getBalance(props.token_address, window.account);
       setBalance(balanced);

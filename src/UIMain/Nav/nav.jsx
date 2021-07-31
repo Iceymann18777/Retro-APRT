@@ -2,7 +2,6 @@ import React, { useCallback, useEffect, useState } from "react";
 import Popup from "reactjs-popup";
 import Web3 from "web3";
 import { tryFetchPrice } from "../../utils/getPrices";
-import { getWeb3NoAccount } from "../../utils/web3Global";
 import {
   mathwlt,
   twtwlt,
@@ -18,6 +17,12 @@ import { tokenAbi } from "../../Resources/lib/abi";
 import Web3Modal, { connectors } from "web3modal";
 import WalletConnectProvider from "@walletconnect/web3-provider";
 import { shortenAddress } from "../../utils/stylish";
+import { Contract, Provider } from "ethcall";
+import { JsonRpcProvider } from "@ethersproject/providers";
+import getRpcUrl from "../../utils/getRpcUrl";
+const RPC_URL = getRpcUrl();
+const providerQbert = new JsonRpcProvider(RPC_URL);
+
 //import logo from "./UIMain/assets/logos/QBERTSWAG.png";
 //import getWeb3 from "../../utils/web3Utils";
 //import Util from "./utils/aprLib/index.js";
@@ -33,7 +38,6 @@ const wbnbAddress = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
 const qbertAddress = "0x6ED390Befbb50f4b492f08Ea0965735906034F81";
 const zeroAdress = "0x0000000000000000000000000000000000000000";
 const burnAddress = "0x000000000000000000000000000000000000dEaD";
-var web3ext;
 
 export default function Nav() {
   var [menu, setMenu] = useState(false);
@@ -168,16 +172,23 @@ export default function Nav() {
   }
 
   const getQbertStats = useCallback(async () => {
-    web3ext = getWeb3NoAccount();
-    let qbert = new web3ext.eth.Contract(tokenAbi, qbertAddress);
+    //web3ext = getWeb3NoAccount();
+    let multiCall = new Provider();
+    await multiCall.init(providerQbert);
+    let qbert = new Contract(qbertAddress, tokenAbi);
     // hacer algo
     //if (!data.loaded) {
     try {
       if (window.account) {
         //setAccount(window.account);
-        let balance = await qbert.methods.balanceOf(window.account).call();
-        let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
-        let totalSupply = await qbert.methods.totalSupply().call();
+        let balanceCall = qbert.balanceOf(window.account);
+        let burnBalanceCall = qbert.balanceOf(burnAddress);
+        let totalSupplyCall = qbert.totalSupply();
+        let [balance, burnBalance, totalSupply] = await multiCall.all([
+          balanceCall,
+          burnBalanceCall,
+          totalSupplyCall
+        ]);
         let ciculatingSupply = totalSupply - burnBalance;
         let bnbPrice = await tryFetchPrice(wbnbAddress);
         let price = await tryFetchPrice(qbertAddress);
@@ -194,9 +205,14 @@ export default function Nav() {
           marketCap: marketCap
         });
       } else {
-        let balance = await qbert.methods.balanceOf(zeroAdress).call();
-        let burnBalance = await qbert.methods.balanceOf(burnAddress).call();
-        let totalSupply = await qbert.methods.totalSupply().call();
+        let balanceCall = qbert.balanceOf(zeroAdress);
+        let burnBalanceCall = qbert.balanceOf(burnAddress);
+        let totalSupplyCall = qbert.totalSupply();
+        let [balance, burnBalance, totalSupply] = await multiCall.all([
+          balanceCall,
+          burnBalanceCall,
+          totalSupplyCall
+        ]);
         let ciculatingSupply = totalSupply - burnBalance;
         let bnbPrice = await tryFetchPrice(wbnbAddress);
         let price = await tryFetchPrice(qbertAddress);

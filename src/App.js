@@ -3,6 +3,7 @@ import Nav from "./UIMain/Nav/nav.jsx";
 import Background from "./UIMain/body/background";
 import Farms from "./UIMain/body/farms/index";
 import Footer from "./UIMain/Footer";
+
 //import Web3Modal from "web3modal";
 //import WalletConnectProvider from "@walletconnect/web3-provider";
 //import { connectors } from "web3modal";
