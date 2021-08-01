@@ -2,24 +2,17 @@ import React, { useCallback, useEffect, useState } from "react";
 import Popup from "reactjs-popup";
 import Web3 from "web3";
 import { tryFetchPrice } from "../../utils/getPrices";
-import {
-  mathwlt,
-  twtwlt,
-  sfplwlt,
-  bnbwlt,
-  mtmskwlt
-} from "../../UIMain/assets/wallets";
 import { logo, qbertpxl, qbertdice } from "../assets/logos";
 import { popupclose, popupcopy } from "../assets/svg";
 //mport utils from "../../utils/aprLib/index";
 import { formatNumberHumanize } from "../../utils/formatBalance";
 import { tokenAbi } from "../../Resources/lib/abi";
-import Web3Modal, { connectors } from "web3modal";
-import WalletConnectProvider from "@walletconnect/web3-provider";
 import { shortenAddress } from "../../utils/stylish";
 import { Contract, Provider } from "ethcall";
 import { JsonRpcProvider } from "@ethersproject/providers";
+import { createweb3Modal } from "../../utils/web3Modal/createweb3Modal";
 import getRpcUrl from "../../utils/getRpcUrl";
+//import {providerOptions} from "../../utils/web3Modal/getNetworks"
 const RPC_URL = getRpcUrl();
 const providerQbert = new JsonRpcProvider(RPC_URL);
 
@@ -28,7 +21,7 @@ const providerQbert = new JsonRpcProvider(RPC_URL);
 //import Util from "./utils/aprLib/index.js";
 //import nativeFarmAbi from "./utils/nativeFarmAbi.js";
 let web3 = "";
-let web3Modal = "";
+//let web3Modal = "";
 let modalProvider = "";
 let provider = "";
 let injectedChainId = "";
@@ -40,6 +33,7 @@ const zeroAdress = "0x0000000000000000000000000000000000000000";
 const burnAddress = "0x000000000000000000000000000000000000dEaD";
 
 export default function Nav() {
+  const [web3Modal, setModal] = useState("");
   var [menu, setMenu] = useState(false);
   var [account, setAccount] = useState("");
   var [data, setData] = useState({
@@ -59,85 +53,11 @@ export default function Nav() {
     }
   };
 
-  async function startup() {
+  async function startup(web3Modal) {
     if (!window.account) {
       console.log("starting up");
-      const providerOptions = {
-        /* See Provider Options Section */
-        injected: {
-          display: {
-            name: "Metamask",
-            description: "Metamask",
-            logo: mtmskwlt
-          }
-        },
-        walletconnect: {
-          package: WalletConnectProvider,
-          options: {
-            rpc: {
-              1: "https://bsc-dataseed.binance.org/",
-              56: "https://bsc-dataseed.binance.org/"
-            },
-            pollingInterval: 3000
-          }
-        },
-        "custom-binance": {
-          display: {
-            name: "Binance",
-            description: "Binance Chain Wallet",
-            logo: bnbwlt
-          },
-          package: "binance",
-          connector: async (ProviderPackage, options) => {
-            let provider = window.BinanceChain;
-            provider.autoRefreshOnNetworkChange = true;
-            await provider.enable();
-            return provider;
-          }
-        },
-        "custom-math": {
-          display: {
-            name: "Math",
-            description: "Math Wallet",
-            logo: mathwlt
-          },
-          package: "math",
-          connector: connectors.injected
-        },
-        "custom-twt": {
-          display: {
-            name: "Trust",
-            description: "Trust Wallet",
-            logo: twtwlt
-          },
-          package: "twt",
-          connector: connectors.injected
-        },
-        "custom-safepal": {
-          display: {
-            name: "SafePal",
-            description: "SafePal App",
-            logo: sfplwlt
-          },
-          package: "safepal",
-          connector: connectors.injected
-        }
-      };
 
-      web3Modal = new Web3Modal({
-        network: "binance", // optional or "binance"
-        cacheProvider: false, // optional
-        providerOptions, // required
-        disableInjectedProvider: false,
-        theme: {
-          background: "#380033a8",
-          main: "#fff",
-          secondary: "#00c0d4",
-          border: "#380033a8",
-          hover: "#ff0a9c78"
-        }
-        //providerOptions // required
-      });
+      //web3Modal
 
       modalProvider = await web3Modal.connect();
       provider = new Web3(modalProvider);
@@ -238,6 +158,7 @@ export default function Nav() {
   useEffect(() => {
     //window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
     //async function updateNav() {await getQbertStats();}
+    setModal(createweb3Modal);
     getQbertStats();
     //setAccount(window.account);
     const interval = setInterval(() => {
@@ -427,7 +348,7 @@ export default function Nav() {
                   whiteSpace: "nowrap",
                   overflow: "hidden"
                 }}
-                onClick={() => startup()}
+                onClick={() => startup(web3Modal)}
               >
                 {shortenAddress(account)
                   ? shortenAddress(account)
@@ -497,7 +418,7 @@ export default function Nav() {
                   whiteSpace: "nowrap",
                   overflow: "hidden"
                 }}
-                onClick={() => startup()}
+                onClick={() => startup(web3Modal)}
               >
                 {shortenAddress(account)
                   ? shortenAddress(account)
