@@ -1,41 +1,35 @@
-import React, { useCallback, useEffect, useState } from "react";
+import React, { useEffect, useRef, useState } from "react";
+import { renderIcon } from "@download/blockies";
+import Avatar from "@material-ui/core/Avatar";
 import Popup from "reactjs-popup";
-import Web3 from "web3";
 import { tryFetchPrice } from "../../utils/getPrices";
 import { logo, qbertpxl, qbertdice } from "../assets/logos";
 import { popupclose, popupcopy } from "../assets/svg";
-//mport utils from "../../utils/aprLib/index";
 import { formatNumberHumanize } from "../../utils/formatBalance";
 import { tokenAbi } from "../../Resources/lib/abi";
 import { shortenAddress } from "../../utils/stylish";
 import { Contract, Provider } from "ethcall";
 import { JsonRpcProvider } from "@ethersproject/providers";
-import { createweb3Modal } from "../../utils/web3Modal/createweb3Modal";
 import getRpcUrl from "../../utils/getRpcUrl";
-//import {providerOptions} from "../../utils/web3Modal/getNetworks"
+
 const RPC_URL = getRpcUrl();
 const providerQbert = new JsonRpcProvider(RPC_URL);
-
-//import logo from "./UIMain/assets/logos/QBERTSWAG.png";
-//import getWeb3 from "../../utils/web3Utils";
-//import Util from "./utils/aprLib/index.js";
-//import nativeFarmAbi from "./utils/nativeFarmAbi.js";
-let web3 = "";
-//let web3Modal = "";
-let modalProvider = "";
-let provider = "";
-let injectedChainId = "";
-let accounts = "";
 
 const wbnbAddress = "0xbb4cdb9cbd36b01bd1cbaebf2de08d9173bc095c";
 const qbertAddress = "0x6ED390Befbb50f4b492f08Ea0965735906034F81";
 const zeroAdress = "0x0000000000000000000000000000000000000000";
 const burnAddress = "0x000000000000000000000000000000000000dEaD";
 
-export default function Nav() {
-  const [web3Modal, setModal] = useState("");
+const HeaderTest = ({
+  connected,
+  address,
+  connectWallet,
+  disconnectWallet
+}) => {
+  //const [shortAddress, setShortAddress] = useState("");
+  const [dataUrl, setDataUrl] = useState(null);
+  const canvasRef = useRef(null);
   var [menu, setMenu] = useState(false);
-  var [account, setAccount] = useState("");
   var [data, setData] = useState({
     balance: 0,
     burnBalance: 0,
@@ -53,55 +47,14 @@ export default function Nav() {
     }
   };
 
-  async function startup(web3Modal) {
-    if (!window.account) {
-      console.log("starting up");
-
-      //web3Modal
-
-      modalProvider = await web3Modal.connect();
-      provider = new Web3(modalProvider);
-      web3 = new Web3(provider);
-      injectedChainId = await web3.eth.getChainId();
-      //getWeb3(provider);
-      //window.web3 = new Web3(provider);
-      //window.ethereum = new Web3(provider);
-      accounts = await web3.eth.getAccounts();
-      window.account = accounts[0];
-      setAccount(window.account);
-      console.log({ injectedChainId });
-      //await getQbertStats();
-    } else {
-      console.log("Disconnect");
-      await onDisconnect();
-      setAccount(window.account);
-      //await getQbertStats();
-    }
-  }
-
-  async function onDisconnect() {
-    web3 = "";
-    provider = "";
-    accounts = "";
-    window.account = "";
-    //window.web3 = "";
-    //window.ethereum = "";
-    setAccount("");
-    //onDisconnect();
-    await web3Modal.clearCachedProvider();
-  }
-
-  const getQbertStats = useCallback(async () => {
-    //web3ext = getWeb3NoAccount();
+  const getQbertStats = async () => {
     let multiCall = new Provider();
     await multiCall.init(providerQbert);
     let qbert = new Contract(qbertAddress, tokenAbi);
-    // hacer algo
-    //if (!data.loaded) {
     try {
-      if (window.account) {
+      if (address) {
         //setAccount(window.account);
-        let balanceCall = qbert.balanceOf(window.account);
+        let balanceCall = qbert.balanceOf(address);
         let burnBalanceCall = qbert.balanceOf(burnAddress);
         let totalSupplyCall = qbert.totalSupply();
         let [balance, burnBalance, totalSupply] = await multiCall.all([
@@ -153,23 +106,35 @@ export default function Nav() {
       console.log(error);
     }
     //}
-  }, []);
+  };
 
   useEffect(() => {
-    //window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
-    //async function updateNav() {await getQbertStats();}
-    setModal(createweb3Modal);
     getQbertStats();
-    //setAccount(window.account);
     const interval = setInterval(() => {
       // do something
-      //updateNav();
       getQbertStats();
     }, 60000);
     return () => {
       clearInterval(interval);
     };
-  }, [account]);
+  }, [address]);
+
+  useEffect(() => {
+    if (!connected) {
+      return;
+    }
+    const canvas = canvasRef.current;
+    renderIcon({ seed: address.toLowerCase() }, canvas);
+    const updatedDataUrl = canvas.toDataURL();
+    if (updatedDataUrl !== dataUrl) {
+      setDataUrl(updatedDataUrl);
+    }
+    //if (address.length < 11) {
+    //   setShortAddress(address);
+    // } else {
+    //    setShortAddress(`${address.slice(0, 6)}...${address.slice(-4)}`);
+    // }
+  }, [dataUrl, address, connected]);
 
   return (
     <header>
@@ -228,10 +193,7 @@ export default function Nav() {
           </div>
           <Popup
             trigger={
-              <a className="btn small ml-20 primary buy-qbert hidden">
-                {" "}
-                QBERT Stats{" "}
-              </a>
+              <a className="btn small ml-20 primary buy-qbert"> QBERT Stats </a>
             }
             modal
             nested
@@ -256,6 +218,7 @@ export default function Nav() {
                     <div className="balance">
                       {formatNumberHumanize(data.balance, 2)}
                     </div>
+
                     <div className="key-value">
                       <div className="key">Price</div>
                       <div className="value qbert-price">
@@ -317,8 +280,8 @@ export default function Nav() {
             className="btn small ml-10 "
             id="btn-wallet-unlock"
           >
-            {shortenAddress(account)
-              ? shortenAddress(account)
+            {shortenAddress(address)
+              ? shortenAddress(address)
               : "Unlock Wallet"}
           </a>
           <div
@@ -348,13 +311,25 @@ export default function Nav() {
                   whiteSpace: "nowrap",
                   overflow: "hidden"
                 }}
-                onClick={() => startup(web3Modal)}
+                onClick={connected ? disconnectWallet : connectWallet}
+                //onClick={() => startup(web3Modal)}
               >
-                {shortenAddress(account)
-                  ? shortenAddress(account)
+                {shortenAddress(address)
+                  ? shortenAddress(address)
                   : "Unlock Wallet"}
               </span>
-              <span className="icon ml-10"></span>
+              <span className="icon ml-10">
+                <canvas ref={canvasRef} style={{ display: "none" }} />
+                <Avatar
+                  alt="address"
+                  src={dataUrl}
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    marginRight: "4px"
+                  }}
+                />
+              </span>
             </div>
           </div>
         </div>
@@ -387,8 +362,8 @@ export default function Nav() {
             id="btn-wallet-unlock"
             style={{ display: "none" }}
           >
-            {shortenAddress(account)
-              ? shortenAddress(account)
+            {shortenAddress(address)
+              ? shortenAddress(address)
               : "Unlock Wallet"}
           </a>
           <div
@@ -418,13 +393,27 @@ export default function Nav() {
                   whiteSpace: "nowrap",
                   overflow: "hidden"
                 }}
-                onClick={() => startup(web3Modal)}
+                onClick={connected ? disconnectWallet : connectWallet}
+                //onClick={() => startup(web3Modal)}
               >
-                {shortenAddress(account)
-                  ? shortenAddress(account)
-                  : "Unlock Wallet"}
+                {connected ? (
+                  <>{shortenAddress(address)}</>
+                ) : (
+                  <>{"Unlock Wallet"}</>
+                )}
               </span>
-              <span className="icon ml-10"></span>
+              <span className="icon ml-10">
+                <canvas ref={canvasRef} style={{ display: "none" }} />
+                <Avatar
+                  alt="address"
+                  src={dataUrl}
+                  style={{
+                    width: "24px",
+                    height: "24px",
+                    marginRight: "4px"
+                  }}
+                />
+              </span>
             </div>
           </div>
           <div className="break"></div>
@@ -548,6 +537,33 @@ export default function Nav() {
           </ul>
         </div>
       </div>
+      <div>
+        <button
+          className="wallet-addres"
+          disableElevation
+          onClick={connected ? disconnectWallet : connectWallet}
+        >
+          {connected ? (
+            <>
+              <canvas ref={canvasRef} style={{ display: "none" }} />
+              <Avatar
+                alt="address"
+                src={dataUrl}
+                style={{
+                  width: "24px",
+                  height: "24px",
+                  marginRight: "4px"
+                }}
+              />
+              {shortenAddress(address)}
+            </>
+          ) : (
+            <>{"Vault-Wallet"}</>
+          )}
+        </button>
+      </div>
     </header>
   );
-}
+};
+
+export default HeaderTest;
