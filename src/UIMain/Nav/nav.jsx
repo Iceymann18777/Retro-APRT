@@ -20,12 +20,7 @@ const qbertAddress = "0x6ED390Befbb50f4b492f08Ea0965735906034F81";
 const zeroAdress = "0x0000000000000000000000000000000000000000";
 const burnAddress = "0x000000000000000000000000000000000000dEaD";
 
-const HeaderTest = ({
-  connected,
-  address,
-  connectWallet,
-  disconnectWallet
-}) => {
+const Nav = ({ connected, address, connectWallet, disconnectWallet }) => {
   //const [shortAddress, setShortAddress] = useState("");
   const [dataUrl, setDataUrl] = useState(null);
   const canvasRef = useRef(null);
@@ -566,4 +561,4 @@ const HeaderTest = ({
   );
 };
 
-export default HeaderTest;
+export default Nav;
