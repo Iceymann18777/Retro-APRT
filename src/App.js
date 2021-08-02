@@ -1,7 +1,10 @@
 import React, { useState, useEffect, useCallback } from "react";
 import Nav from "./UIMain/Nav/nav.jsx";
 import Background from "./UIMain/body/background";
-import Farms from "./UIMain/body/farms/index";
+//import Farms from "./UIMain/body/farms/index";
+import Tvl from "./UIMain/body/farms/tvl";
+import Stats from "./UIMain/body/farms/stats";
+import Pools from "./UIMain/body/farms/poolsd/pools";
 import Footer from "./UIMain/Footer";
 import { createweb3Modal } from "./utils/web3Modal/createweb3Modal";
 import { useConnectWallet, useDisconnectWallet } from "./utils/web3Modal/hooks";
@@ -66,12 +69,23 @@ export default function App() {
           disconnectWallet={disconnectWalletCallback}
         />
         <Background />
-        <Farms
+        <div className="content">
+          <div className="title">
+            <div className="txt ttl">
+              RetroDEFI <br></br> QBERT Optimized Farms
+            </div>
+            <Tvl />
+          </div>
+
+          <Stats />
+          <Pools />
+        </div>
+        {/* <Farms
           address={address}
           connected={connected}
           connectWallet={connectWalletCallback}
           disconnectWallet={disconnectWalletCallback}
-        />
+       />*/}
         <Footer />
         {/*<HeaderTest
           address={address}

@@ -8,7 +8,7 @@ export default function Farms() {
         <div className="txt ttl">
           RetroDEFI <br></br> QBERT Optimized Farms
         </div>
-        <Tvl></Tvl>
+        <Tvl />
       </div>
 
       <Stats />
