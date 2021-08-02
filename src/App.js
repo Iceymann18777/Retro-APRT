@@ -5,7 +5,7 @@ import Farms from "./UIMain/body/farms/index";
 import Footer from "./UIMain/Footer";
 import { createweb3Modal } from "./utils/web3Modal/createweb3Modal";
 import { useConnectWallet, useDisconnectWallet } from "./utils/web3Modal/hooks";
-import HeaderTest from "./UIMain/HeaderTest";
+//import HeaderTest from "./UIMain/Nav/HeaderTest";
 //import Web3Modal from "web3modal";
 //import WalletConnectProvider from "@walletconnect/web3-provider";
 //import { connectors } from "web3modal";
@@ -73,12 +73,12 @@ export default function App() {
           disconnectWallet={disconnectWalletCallback}
         />
         <Footer />
-        <HeaderTest
+        {/*<HeaderTest
           address={address}
           connected={connected}
           connectWallet={connectWalletCallback}
           disconnectWallet={disconnectWalletCallback}
-        />
+        />*/}
         {/*<button onClick={() => startup()}>Check Out</button>*/}
       </main>
       {/* <ul>
