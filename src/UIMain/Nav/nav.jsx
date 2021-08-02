@@ -46,57 +46,40 @@ const Nav = ({ connected, address, connectWallet, disconnectWallet }) => {
     let multiCall = new Provider();
     await multiCall.init(providerQbert);
     let qbert = new Contract(qbertAddress, tokenAbi);
+    var balanceCall;
+    var burnBalanceCall;
+    var totalSupplyCall;
+    var ciculatingSupply;
+    var marketCap;
     try {
       if (address) {
-        //setAccount(window.account);
-        let balanceCall = qbert.balanceOf(address);
-        let burnBalanceCall = qbert.balanceOf(burnAddress);
-        let totalSupplyCall = qbert.totalSupply();
-        let [balance, burnBalance, totalSupply] = await multiCall.all([
-          balanceCall,
-          burnBalanceCall,
-          totalSupplyCall
-        ]);
-        let ciculatingSupply = totalSupply - burnBalance;
-        let bnbPrice = await tryFetchPrice(wbnbAddress);
-        let price = await tryFetchPrice(qbertAddress);
-        window.qbertprice = price;
-        window.bnbprice = bnbPrice;
-        //let price = await utils.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
-        let marketCap = price * (ciculatingSupply / 10 ** 18);
-        setData({
-          balance: balance / 10 ** 18,
-          burnBalance: burnBalance / 10 ** 18,
-          totalSupply: totalSupply / 10 ** 18,
-          ciculatingSupply: ciculatingSupply / 10 ** 18,
-          price: price,
-          marketCap: marketCap
-        });
+        balanceCall = qbert.balanceOf(address);
+        burnBalanceCall = qbert.balanceOf(burnAddress);
+        totalSupplyCall = qbert.totalSupply();
       } else {
-        let balanceCall = qbert.balanceOf(zeroAdress);
-        let burnBalanceCall = qbert.balanceOf(burnAddress);
-        let totalSupplyCall = qbert.totalSupply();
-        let [balance, burnBalance, totalSupply] = await multiCall.all([
-          balanceCall,
-          burnBalanceCall,
-          totalSupplyCall
-        ]);
-        let ciculatingSupply = totalSupply - burnBalance;
-        let bnbPrice = await tryFetchPrice(wbnbAddress);
-        let price = await tryFetchPrice(qbertAddress);
-        window.qbertprice = price;
-        window.bnbprice = bnbPrice;
-        //let price = await utils.getTokenPrice("0x6D45A9C8f812DcBb800b7Ac186F1eD0C055e218f",18);
-        let marketCap = price * (ciculatingSupply / 10 ** 18);
-        setData({
-          balance: balance / 10 ** 18,
-          burnBalance: burnBalance / 10 ** 18,
-          totalSupply: totalSupply / 10 ** 18,
-          ciculatingSupply: ciculatingSupply / 10 ** 18,
-          price: price,
-          marketCap: marketCap
-        });
+        balanceCall = qbert.balanceOf(zeroAdress);
+        burnBalanceCall = qbert.balanceOf(burnAddress);
+        totalSupplyCall = qbert.totalSupply();
       }
+      let [balance, burnBalance, totalSupply] = await multiCall.all([
+        balanceCall,
+        burnBalanceCall,
+        totalSupplyCall
+      ]);
+      ciculatingSupply = totalSupply - burnBalance;
+      var bnbPrice = await tryFetchPrice(wbnbAddress);
+      var price = await tryFetchPrice(qbertAddress);
+      window.qbertprice = price;
+      window.bnbprice = bnbPrice;
+      marketCap = price * (ciculatingSupply / 10 ** 18);
+      setData({
+        balance: balance / 10 ** 18,
+        burnBalance: burnBalance / 10 ** 18,
+        totalSupply: totalSupply / 10 ** 18,
+        ciculatingSupply: ciculatingSupply / 10 ** 18,
+        price: price,
+        marketCap: marketCap
+      });
     } catch (error) {
       console.log(error);
     }
