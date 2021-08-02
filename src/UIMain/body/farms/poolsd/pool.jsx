@@ -34,7 +34,7 @@ export default function Pool(props) {
     locked: true
   });
 
-  const loadPool = useCallback(async () => {
+  const loadPool = async () => {
     window.ts = { value: 0, pending: 0, deposited: 0, added: [] };
     web3ext = getWeb3NoAccount();
     let token = new web3ext.eth.Contract(tokenAbi, props.token_address);
@@ -109,7 +109,7 @@ export default function Pool(props) {
       locked
     });
     //}
-  }, []);
+  };
 
   async function tokenPrice() {
     var tokenPrice = 0;
@@ -250,7 +250,7 @@ export default function Pool(props) {
     return () => {
       clearInterval(interval);
     };
-  }, [loadPool]);
+  }, []);
 
   let sd = () => {
     $(`div.details.id${props.id}`).slideToggle(500);
