@@ -58,7 +58,7 @@ export default function Tvl() {
     return () => {
       clearInterval(interval);
     };
-  });
+  }, []);
 
   function renderer({ hours, minutes, seconds, completed, api }) {
     if (completed) {
