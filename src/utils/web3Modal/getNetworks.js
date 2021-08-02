@@ -23,8 +23,7 @@ export const providerOptions = {
       rpc: {
         1: "https://bsc-dataseed.binance.org/",
         56: "https://bsc-dataseed.binance.org/"
-      },
-      pollingInterval: 3000
+      }
     }
   },
   "custom-binance": {
