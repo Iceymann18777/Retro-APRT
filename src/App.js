@@ -1,9 +1,11 @@
-import React from "react";
+import React, { useState, useEffect, useCallback } from "react";
 import Nav from "./UIMain/Nav/nav.jsx";
 import Background from "./UIMain/body/background";
 import Farms from "./UIMain/body/farms/index";
 import Footer from "./UIMain/Footer";
-
+import { createweb3Modal } from "./utils/web3Modal/createweb3Modal";
+import { useConnectWallet, useDisconnectWallet } from "./utils/web3Modal/hooks";
+import HeaderTest from "./UIMain/HeaderTest";
 //import Web3Modal from "web3modal";
 //import WalletConnectProvider from "@walletconnect/web3-provider";
 //import { connectors } from "web3modal";
@@ -26,13 +28,57 @@ import Footer from "./UIMain/Footer";
 }
 
 export default function App() {
+  const {
+    connectWallet,
+    web3,
+    address,
+    networkId,
+    connected
+  } = useConnectWallet();
+  const { disconnectWallet } = useDisconnectWallet();
+  const [web3Modal, setModal] = useState(null);
+
+  useEffect(() => {
+    setModal(createweb3Modal);
+  }, [setModal]);
+
+  useEffect(() => {
+    if (web3Modal && (web3Modal.cachedProvider || window.ethereum)) {
+      connectWallet(web3Modal);
+    }
+  }, [web3Modal, connectWallet]);
+
+  const connectWalletCallback = useCallback(() => {
+    connectWallet(web3Modal);
+  }, [web3Modal, connectWallet]);
+
+  const disconnectWalletCallback = useCallback(() => {
+    disconnectWallet(web3, web3Modal);
+  }, [web3, web3Modal, disconnectWallet]);
+
   return (
     <div className="App">
       <main className="app preload">
-        <Nav />
+        <Nav
+          address={address}
+          connected={connected}
+          connectWallet={connectWalletCallback}
+          disconnectWallet={disconnectWalletCallback}
+        />
         <Background />
-        <Farms />
+        <Farms
+          address={address}
+          connected={connected}
+          connectWallet={connectWalletCallback}
+          disconnectWallet={disconnectWalletCallback}
+        />
         <Footer />
+        <HeaderTest
+          address={address}
+          connected={connected}
+          connectWallet={connectWalletCallback}
+          disconnectWallet={disconnectWalletCallback}
+        />
         {/*<button onClick={() => startup()}>Check Out</button>*/}
       </main>
       {/* <ul>
