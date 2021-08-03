@@ -71,13 +71,6 @@ export default function App() {
         <Background />
         <Farms web3={web3} address={address} connected={connected} />
         <Footer />
-        {/*<HeaderTest
-          address={address}
-          connected={connected}
-          connectWallet={connectWalletCallback}
-          disconnectWallet={disconnectWalletCallback}
-        />*/}
-        {/*<button onClick={() => startup()}>Check Out</button>*/}
       </main>
       {/* <ul>
           <li>

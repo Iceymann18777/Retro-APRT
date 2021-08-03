@@ -251,7 +251,7 @@ export default function Pool({
     return () => {
       clearInterval(interval);
     };
-  }, [address]);
+  }, [connected]);
 
   let sd = () => {
     $(`div.details.id${id}`).slideToggle(500);
