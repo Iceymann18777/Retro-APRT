@@ -6,20 +6,21 @@ import { formatNumberHumanize } from "../../../utils/formatBalance";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
 function Stats({ web3, address, connected }) {
   var [data, setData] = useState({ pending: 0, deposit: 0 });
+
   const getUserStats = async () => {
     //if (web3.eth) {
     //await loadPending();
+    var pendingUser = 0;
+    var depositedUser = 0;
+
     if (connected) {
-      setData({
-        pending: window.ts.pending,
-        deposited: window.ts.deposited
-      });
-    } else {
-      setData({
-        pending: 0,
-        deposited: 0
-      });
+      pendingUser = window.ts.pending;
+      depositedUser = window.ts.deposited;
     }
+    setData({
+      pending: pendingUser,
+      deposited: depositedUser
+    });
     //}
   };
 
