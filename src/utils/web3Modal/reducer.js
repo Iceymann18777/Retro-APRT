@@ -5,7 +5,7 @@ const reducers = [connectWalletReducer, disconnectWalletReducer];
 
 const initialState = {
   address: "",
-  web3: null,
+  web3: "",
   connected: false,
   networkId: 56
 };

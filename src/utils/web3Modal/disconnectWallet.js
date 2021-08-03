@@ -16,6 +16,7 @@ export function disconnectWallet(web3, web3Modal) {
           await web3.currentProvider.close();
         }
         await web3Modal.clearCachedProvider();
+        window.account = "";
         dispatch({ type: HOME_DISCONNECT_WALLET_SUCCESS });
         resolve();
       } catch (error) {
@@ -53,14 +54,14 @@ export function reducer(state, action) {
       return {
         ...state,
         address: "",
-        web3: null,
+        web3: "",
         connected: false,
         disconnectWalletPending: false
       };
     case HOME_DISCONNECT_WALLET_FAILURE:
       return {
         ...state,
-        web3: null,
+        web3: "",
         address: "",
         disconnectWalletPending: false
       };
