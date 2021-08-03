@@ -4,7 +4,7 @@ import $ from "jquery";
 import config from "../../../pools_config.json";
 import { formatNumberHumanize } from "../../../utils/formatBalance";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
-function Stats({ web3, address, connected }) {
+function Stats({ web3, address }) {
   var [data, setData] = useState({ pending: 0, deposit: 0 });
 
   const getUserStats = async () => {
@@ -13,7 +13,7 @@ function Stats({ web3, address, connected }) {
     var pendingUser = 0;
     var depositedUser = 0;
 
-    if (connected) {
+    if (address) {
       pendingUser = window.ts.pending;
       depositedUser = window.ts.deposited;
     }

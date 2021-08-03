@@ -11,7 +11,7 @@ export default function Farms({ web3, address, connected }) {
         <Tvl web3={web3} address={address} connected={connected} />
       </div>
 
-      <Stats web3={web3} address={address} connected={connected} />
+      <Stats web3={web3} address={address} />
       <Pools web3={web3} address={address} connected={connected} />
     </div>
   );
