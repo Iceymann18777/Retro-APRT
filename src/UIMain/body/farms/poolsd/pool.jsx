@@ -69,13 +69,13 @@ export default function Pool({
     var price;
     var locked;
     var balance;
-    var apr;
+    var apr = 0;
     var balanced = 0;
     var burnAmount = 0;
     setBalance(balanced);
-    if (!poolInfo.price) {
-      price = await tokenPrice();
-    }
+    //if (!poolInfo.price) {
+    price = await tokenPrice();
+    //}
     if (token_address === "0xa6e53f07bD410df069e20Ced725bdC9135146Fe9") {
       burnAmount = await rcube.methods._getBurnLevy.call().call();
     }
