@@ -77,7 +77,7 @@ export default function App() {
             <Tvl />
           </div>
 
-          <Stats web={web3} address={address} />
+          <Stats web3={web3} address={address} connected={connected} />
           <Pools />
         </div>
         {/* <Farms

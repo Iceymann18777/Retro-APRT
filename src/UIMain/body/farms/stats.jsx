@@ -6,28 +6,24 @@ import { formatNumberHumanize } from "../../../utils/formatBalance";
 //import Web3 from "web3";
 import { getWeb3NoAccount } from "../../../utils/web3Global";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
-function Stats({ address }) {
+function Stats({ web3, address }) {
   var [data, setData] = useState({ pending: 0, deposit: 0 });
-  const getUserStats = async () => {
-    try {
-      //if (web3.eth) {
-      //await loadPending();
-      if (address) {
-        setData({
-          pending: window.ts.pending,
-          deposited: window.ts.deposited
-        });
-      } else {
-        setData({
-          pending: 0,
-          deposited: 0
-        });
-      }
-      //}
-    } catch (error) {
-      console.log(error);
+  const getUserStats = useCallback(async () => {
+    //if (web3.eth) {
+    //await loadPending();
+    if (address) {
+      setData({
+        pending: window.ts.pending,
+        deposited: window.ts.deposited
+      });
+    } else {
+      setData({
+        pending: 0,
+        deposited: 0
+      });
     }
-  };
+    //}
+  }, []);
 
   useEffect(() => {
     getUserStats();
@@ -57,7 +53,7 @@ function Stats({ address }) {
   }
 
   async function harvestall() {
-    const web3 = await getWeb3NoAccount();
+    //const web3 = await getWeb3NoAccount();
     let pool = new web3.eth.Contract(poolAbi, farmAddress);
     for (let i = 0; i < config.length; i++) {
       try {
