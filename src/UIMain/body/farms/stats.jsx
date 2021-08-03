@@ -24,7 +24,7 @@ function Stats({ web3, address }) {
   }, []);
 
   useEffect(() => {
-    //getUserStats();
+    getUserStats();
     const interval = setInterval(() => {
       getUserStats();
     }, 3141);
