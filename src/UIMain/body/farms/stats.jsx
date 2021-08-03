@@ -3,15 +3,13 @@ import { poolAbi } from "../../../Resources/lib/abi";
 import $ from "jquery";
 import config from "../../../pools_config.json";
 import { formatNumberHumanize } from "../../../utils/formatBalance";
-//import Web3 from "web3";
-import { getWeb3NoAccount } from "../../../utils/web3Global";
 const farmAddress = "0x738600B15B2b6845d7Fe5B6C7Cb911332Fb89949";
-function Stats({ web3, address }) {
+function Stats({ web3, address, connected }) {
   var [data, setData] = useState({ pending: 0, deposit: 0 });
-  const getUserStats = useCallback(async () => {
+  const getUserStats = async () => {
     //if (web3.eth) {
     //await loadPending();
-    if (address) {
+    if (connected) {
       setData({
         pending: window.ts.pending,
         deposited: window.ts.deposited
@@ -23,7 +21,7 @@ function Stats({ web3, address }) {
       });
     }
     //}
-  }, []);
+  };
 
   useEffect(() => {
     getUserStats();

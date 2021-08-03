@@ -1,18 +1,18 @@
 import Pools from "./poolsd/pools";
 import Stats from "./stats";
 import Tvl from "./tvl";
-export default function Farms() {
+export default function Farms({ web3, address, connected }) {
   return (
     <div className="content">
       <div className="title">
         <div className="txt ttl">
           RetroDEFI <br></br> QBERT Optimized Farms
         </div>
-        <Tvl />
+        <Tvl web3={web3} address={address} connected={connected} />
       </div>
 
-      <Stats />
-      <Pools />
+      <Stats web3={web3} address={address} connected={connected} />
+      <Pools web3={web3} address={address} connected={connected} />
     </div>
   );
 }
