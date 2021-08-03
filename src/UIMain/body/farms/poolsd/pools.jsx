@@ -5,7 +5,7 @@ import Pool from "./pool";
 //import getTokenPrice from "../../../utils/aprLib/index";
 //import send from "../../../utils/getTvl";
 
-export default function Pools() {
+export default function Pools({ web3, address, connected }) {
   return (
     <div className="pools">
       {config.map((pool, i) => (
@@ -28,6 +28,9 @@ export default function Pools() {
           isBNB={pool.isBNB}
           compound={pool.compound}
           isLpCompund={pool.isLPcompund}
+          web3={web3}
+          address={address}
+          connected={address}
         />
       ))}
     </div>
