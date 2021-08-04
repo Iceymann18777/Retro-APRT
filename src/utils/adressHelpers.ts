@@ -14,11 +14,17 @@ export const getRCUBEAddress = () => {
 export const getQBertAddress = () => {
   return getAddress(tokens.qbert.address);
 };
-export const getMasterChefAddress = () => {
-  return getAddress(addresses.masterChef);
+export const getnativeFarmAddress = () => {
+  return getAddress(addresses.nativeFarm);
 };
 export const getMulticallAddress = () => {
   return getAddress(addresses.mulltiCall);
+};
+export const getZeroAddress = () => {
+  return getAddress(addresses.zeroAddress);
+};
+export const getburnAddress = () => {
+  return getAddress(addresses.burnAddress);
 };
 export const getWbnbAddress = () => {
   return getAddress(tokens.wbnb.address);

@@ -46,6 +46,9 @@ const Nav = ({ connected, address, connectWallet, disconnectWallet }) => {
     let multiCall = new Provider();
     await multiCall.init(providerQbert);
     let qbert = new Contract(qbertAddress, tokenAbi);
+    var balance = 0;
+    var burnBalance = 0;
+    var totalSupply = 0;
     var balanceCall;
     var burnBalanceCall;
     var totalSupplyCall;
@@ -61,11 +64,12 @@ const Nav = ({ connected, address, connectWallet, disconnectWallet }) => {
         burnBalanceCall = qbert.balanceOf(burnAddress);
         totalSupplyCall = qbert.totalSupply();
       }
-      let [balance, burnBalance, totalSupply] = await multiCall.all([
+      [balance, burnBalance, totalSupply] = await multiCall.all([
         balanceCall,
         burnBalanceCall,
         totalSupplyCall
       ]);
+      console.log(balanceCall, burnBalanceCall, totalSupplyCall);
       ciculatingSupply = totalSupply - burnBalance;
       var bnbPrice = await tryFetchPrice(wbnbAddress);
       var price = await tryFetchPrice(qbertAddress);
