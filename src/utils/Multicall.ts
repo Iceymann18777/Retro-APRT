@@ -10,7 +10,7 @@ interface Call {
   params?: any[]; // Function params
 }
 
-const multicall = async (abi: any[], calls: Call[]) => {
+const multicall = async (abi: [], calls: Call[]) => {
   const web3 = getWeb3NoAccount();
   // console.log("MULTICALL ADDRESS");
   // console.log(getMulticallAddress());
