@@ -9,7 +9,6 @@
     ],
     "sourceMap": true,
     "allowJs": true,
-    "allowNamespaces": true,
     "jsx": "react-jsx",
     "moduleResolution": "node",
     "rootDir": "src",
