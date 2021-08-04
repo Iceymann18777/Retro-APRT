@@ -1,4 +1,4 @@
-import React, { useEffect, useRef, useState } from "react";
+import React, { useEffect, useRef, useState, useCallback } from "react";
 import { renderIcon } from "@download/blockies";
 import Avatar from "@material-ui/core/Avatar";
 import Popup from "reactjs-popup";
@@ -42,7 +42,7 @@ const Nav = ({ connected, address, connectWallet, disconnectWallet }) => {
     }
   };
 
-  const getQbertStats = async () => {
+  const getQbertStats = useCallback(async () => {
     let multiCall = new Provider();
     await multiCall.init(providerQbert);
     let qbert = new Contract(qbertAddress, tokenAbi);
@@ -54,41 +54,37 @@ const Nav = ({ connected, address, connectWallet, disconnectWallet }) => {
     var totalSupplyCall;
     var ciculatingSupply;
     var marketCap;
-    try {
-      if (address) {
-        balanceCall = qbert.balanceOf(address);
-        burnBalanceCall = qbert.balanceOf(burnAddress);
-        totalSupplyCall = qbert.totalSupply();
-      } else {
-        balanceCall = qbert.balanceOf(zeroAdress);
-        burnBalanceCall = qbert.balanceOf(burnAddress);
-        totalSupplyCall = qbert.totalSupply();
-      }
-      [balance, burnBalance, totalSupply] = await multiCall.all([
-        balanceCall,
-        burnBalanceCall,
-        totalSupplyCall
-      ]);
-      console.log(balanceCall, burnBalanceCall, totalSupplyCall);
-      ciculatingSupply = totalSupply - burnBalance;
-      var bnbPrice = await tryFetchPrice(wbnbAddress);
-      var price = await tryFetchPrice(qbertAddress);
-      window.qbertprice = price;
-      window.bnbprice = bnbPrice;
-      marketCap = price * (ciculatingSupply / 10 ** 18);
-      setData({
-        balance: balance / 10 ** 18,
-        burnBalance: burnBalance / 10 ** 18,
-        totalSupply: totalSupply / 10 ** 18,
-        ciculatingSupply: ciculatingSupply / 10 ** 18,
-        price: price,
-        marketCap: marketCap
-      });
-    } catch (error) {
-      console.log(error);
+    if (address) {
+      balanceCall = qbert.balanceOf(address);
+      burnBalanceCall = qbert.balanceOf(burnAddress);
+      totalSupplyCall = qbert.totalSupply();
+    } else {
+      balanceCall = qbert.balanceOf(zeroAdress);
+      burnBalanceCall = qbert.balanceOf(burnAddress);
+      totalSupplyCall = qbert.totalSupply();
     }
+    [balance, burnBalance, totalSupply] = await multiCall.all([
+      balanceCall,
+      burnBalanceCall,
+      totalSupplyCall
+    ]);
+    console.log(balanceCall, burnBalanceCall, totalSupplyCall);
+    ciculatingSupply = totalSupply - burnBalance;
+    var bnbPrice = await tryFetchPrice(wbnbAddress);
+    var price = await tryFetchPrice(qbertAddress);
+    window.qbertprice = price;
+    window.bnbprice = bnbPrice;
+    marketCap = price * (ciculatingSupply / 10 ** 18);
+    setData({
+      balance: balance / 10 ** 18,
+      burnBalance: burnBalance / 10 ** 18,
+      totalSupply: totalSupply / 10 ** 18,
+      ciculatingSupply: ciculatingSupply / 10 ** 18,
+      price: price,
+      marketCap: marketCap
+    });
     //}
-  };
+  }, [address]);
 
   useEffect(() => {
     getQbertStats();
@@ -99,7 +95,7 @@ const Nav = ({ connected, address, connectWallet, disconnectWallet }) => {
     return () => {
       clearInterval(interval);
     };
-  }, [address]);
+  }, [getQbertStats]);
 
   useEffect(() => {
     if (!connected) {
@@ -127,7 +123,7 @@ const Nav = ({ connected, address, connectWallet, disconnectWallet }) => {
       <div className="container">
         <div className="logo">
           <a href="/">
-            <img src={logo} />
+            <img src={logo} alt="logo" />
           </a>
         </div>
         <menu>
@@ -282,7 +278,7 @@ const Nav = ({ connected, address, connectWallet, disconnectWallet }) => {
               className="wallet-info"
               style={{
                 backgroundColor: "#000",
-                boxShadow: "0 0 20px 5px #18da8d"
+                boxShadow: "0 0 20px 5px #eca408"
               }}
             >
               <span
@@ -364,7 +360,7 @@ const Nav = ({ connected, address, connectWallet, disconnectWallet }) => {
               className="wallet-info"
               style={{
                 backgroundColor: "#000",
-                boxShadow: "0 0 20px 5px #18da8d"
+                boxShadow: "0 0 20px 5px #eca408"
               }}
             >
               <span

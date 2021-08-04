@@ -3,7 +3,7 @@ export const formatNumberHumanize = (num, decimals) => {
     num = parseFloat(num);
   }
   num = num.toFixed(decimals);
-  if (decimals == 0) {
+  if (decimals === 0) {
     return num.toString().replace(/\B(?=(\d{3})+(?!\d))/g, ",");
   } else {
     num = num.split(".");
